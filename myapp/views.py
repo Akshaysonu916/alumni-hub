@@ -7,6 +7,17 @@ from django.contrib.auth import logout,login,authenticate
 
 # Create your views here.
 
+# @login_required(login_url='signin')
+def add_job(request):
+    if request.method == 'POST':
+        form = JobPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('jobpost_list')  # Redirect to the job post list page
+    else:
+        form = JobPostForm()
+    return render(request, 'addjobs.html', {'form': form})
+
 def signup_view(request):
     if request.method == 'POST':
         print('working signup')
@@ -73,3 +84,8 @@ def home_view(request):
 def logout_view(request):
     logout(request)
     return redirect('signin')
+
+
+def jobpost_list(request):
+    jobs = JobPost.objects.all()  # Fetch all job posts
+    return render(request, 'jobpost_list.html', {'jobs': jobs})

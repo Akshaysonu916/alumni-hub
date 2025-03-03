@@ -1,0 +1,24 @@
+{% extends "home.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Job Posts</h1>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {% for job in jobs %}
+            <div class="bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ job.job_name }}</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ job.company }}</p>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{{ job.description }}</p>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                    Job Type: {{ job.get_job_type_display }}
+                </p>
+                <a href="{{ job.application_link }}" target="_blank" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Apply Now
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

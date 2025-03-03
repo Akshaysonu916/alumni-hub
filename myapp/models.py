@@ -39,17 +39,28 @@ class StudentProfile(models.Model):
         return f"{self.user.username} - {self.major}"
 
 # Job Post Model (Posted by Alumni)
+# class JobPost(models.Model):
+#     title = models.CharField(max_length=255)
+#     company = models.CharField(max_length=255)
+#     description = models.TextField()
+#     job_type = models.CharField(max_length=100, choices=[("FT", "Full-Time"), ("PT", "Part-Time")])
+#     application_link = models.URLField()
+#     location = models.CharField(max_length=255)  # Ensure this field exists
+
 class JobPost(models.Model):
-    alumni = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts', limit_choices_to={'role': 'alumni'})
-    title = models.CharField(max_length=255)
-    company_name = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    job_description = models.TextField()
-    apply_link = models.URLField()
-    posted_on = models.DateTimeField(auto_now_add=True)
+    job_name = models.CharField(max_length=100,default="Unnamed Job")
+    company = models.CharField(max_length=255)
+    description = models.TextField(blank=True)  # Changed to TextField
+    job_type = models.CharField(
+        max_length=100,
+        choices=[("FT", "Full-Time"), ("PT", "Part-Time")],
+        default=4  # Added default value
+    )
+    application_link = models.URLField(blank=True, null=True)  # Allowing blank values
 
     def __str__(self):
-        return f"{self.title} at {self.company_name} by {self.alumni.username}"
+        return self.job_name
+
 
 # Events Model (Managed by Admin)
 class Event(models.Model):

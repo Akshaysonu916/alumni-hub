@@ -1,0 +1,64 @@
+{% extends "home.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <!-- Logo and Heading -->
+        <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+            <img class="w-8 h-8 mr-2" src="https://t3.ftcdn.net/jpg/03/14/85/06/360_F_314850659_2aQLerz30kWj78tqpaGSbzYD6sAUmuDf.jpg" alt="logo">
+            SwiftCart
+        </a>
+        <!-- Form Container -->
+        <div class="w-full bg-gray-200 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Add a Job Post
+                </h1>
+                <!-- Job Post Form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- Job Name Field -->
+                    <div class="form-group">
+                        {{ form.job_name }}
+                        {% if form.job_name.errors %}
+                            <p class="text-sm text-red-500">{{ form.job_name.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <!-- Company Field -->
+                    <div class="form-group">
+                        {{ form.company }}
+                        {% if form.company.errors %}
+                            <p class="text-sm text-red-500">{{ form.company.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <!-- Description Field -->
+                    <div class="form-group">
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <p class="text-sm text-red-500">{{ form.description.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <!-- Job Type Field -->
+                    <div class="form-group">
+                        {{ form.job_type }}
+                        {% if form.job_type.errors %}
+                            <p class="text-sm text-red-500">{{ form.job_type.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <!-- Application Link Field -->
+                    <div class="form-group">
+                        {{ form.application_link }}
+                        {% if form.application_link.errors %}
+                            <p class="text-sm text-red-500">{{ form.application_link.errors }}</p>
+                        {% endif %}
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn bg-gray-900 text-white py-2 px-4 rounded-lg">
+                        Add Job Post
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
