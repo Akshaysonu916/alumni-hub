@@ -1,7 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-# Custom User Model with Role-based access
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -38,48 +36,28 @@ class StudentProfile(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.major}"
 
-# Job Post Model (Posted by Alumni)
-# class JobPost(models.Model):
-#     title = models.CharField(max_length=255)
-#     company = models.CharField(max_length=255)
-#     description = models.TextField()
-#     job_type = models.CharField(max_length=100, choices=[("FT", "Full-Time"), ("PT", "Part-Time")])
-#     application_link = models.URLField()
-#     location = models.CharField(max_length=255)  # Ensure this field exists
-
 class JobPost(models.Model):
     job_name = models.CharField(max_length=100,default="Unnamed Job")
     company = models.CharField(max_length=255)
     description = models.TextField(blank=True)  # Changed to TextField
     job_type = models.CharField(
         max_length=100,
-        choices=[("FT", "Full-Time"), ("PT", "Part-Time")],
+        choices=[("FT", "Full-Time"), ("PT", "Part-Time"),("IS", "Intern-Ship")],
         default=4  # Added default value
     )
     application_link = models.URLField(blank=True, null=True)  # Allowing blank values
+    company_website = models.URLField(blank=True, null=True)  # New field for company site link
 
     def __str__(self):
         return self.job_name
 
-
-# Events Model (Managed by Admin)
-class Event(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    event_date = models.DateTimeField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events', limit_choices_to={'role': 'admin'})
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
 # Chat Model (Between Alumni & Students)
-class ChatMessage(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
-    message = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class ChatMessage(models.Model):
+#     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+#     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+#     message = models.TextField()
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Message from {self.sender.username} to {self.receiver.username}"
+#     def __str__(self):
+#         return f"Message from {self.sender.username} to {self.receiver.username}"
 

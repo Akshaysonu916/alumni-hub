@@ -66,7 +66,7 @@ def signin_view(request):
         if user:
             login(request, user)
             if user.is_superuser:
-                return redirect('products')
+                return redirect('jobpost_list')
             else:
                 return redirect('home')
 

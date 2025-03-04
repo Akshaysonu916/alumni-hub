@@ -1,24 +1,40 @@
 {% extends "home.html" %}
 {% block content %}
 {% include "navbar.html" %}
-<section class="bg-gray-50 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Job Posts</h1>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+<!-- Background Section -->
+<section class="py-12 antialiased dark:bg-gray-100">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white-500 mb-6 text-center">Job Posts</h1>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-6">
             {% for job in jobs %}
-            <div class="bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ job.job_name }}</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ job.company }}</p>
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{{ job.description }}</p>
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
                     Job Type: {{ job.get_job_type_display }}
                 </p>
-                <a href="{{ job.application_link }}" target="_blank" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                    Apply Now
-                </a>
+                <div class="mt-4 flex items-center justify-between">
+                    <!-- Apply Now Button -->
+                    {% if job.application_link %}
+                    <a href="{{ job.application_link }}" target="_blank"
+                        class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Apply Now
+                    </a>
+                    {% endif %}
+                    <!-- More Info Button (Company Website) -->
+                    {% if job.company_website %}
+                    <a href="{{ job.company_website }}" target="_blank"
+                        class="inline-block bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+                        More Info
+                    </a>
+                    {% endif %}
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
+
 {% endblock content %}
