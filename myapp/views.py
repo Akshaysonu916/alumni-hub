@@ -7,7 +7,7 @@ from django.contrib.auth import logout,login,authenticate
 
 # Create your views here.
 
-# @login_required(login_url='signin')
+@login_required(login_url='signin')
 def add_job(request):
     if request.method == 'POST':
         form = JobPostForm(request.POST)
@@ -26,6 +26,7 @@ def signup_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+
         print('email',email)
         print('username',username)
         print('password',password)
@@ -85,7 +86,7 @@ def logout_view(request):
     logout(request)
     return redirect('signin')
 
-
+@login_required(login_url='signin')
 def jobpost_list(request):
     jobs = JobPost.objects.all()  # Fetch all job posts
     return render(request, 'jobpost_list.html', {'jobs': jobs})

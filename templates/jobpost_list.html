@@ -2,31 +2,36 @@
 {% block content %}
 {% include "navbar.html" %}
 
-<!-- Background Section -->
-<section class="py-12 antialiased dark:bg-gray-100">
-    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white-500 mb-6 text-center">Job Posts</h1>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 p-6">
+<!-- Job Posts Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="mx-auto max-w-screen-xl px-6 lg:px-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-12">
+            Explore Job Opportunities
+        </h1>
+
+        {% if jobs %}
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {% for job in jobs %}
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{{ job.job_name }}</h2>
+            <div class="relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-md transition-transform duration-300 p-6 
+                        hover:scale-105 hover:shadow-2xl hover:ring-2 hover:ring-blue-400 dark:hover:ring-blue-600">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ job.job_name }}</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ job.company }}</p>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{{ job.description }}</p>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                    Job Type: {{ job.get_job_type_display }}
+                <p class="mt-3 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{{ job.description }}</p>
+                <p class="mt-2 text-sm font-medium text-gray-700 dark:text-gray-400">
+                    <span class="font-semibold text-blue-600 dark:text-blue-400">Job Type:</span> {{ job.get_job_type_display }}
                 </p>
-                <div class="mt-4 flex items-center justify-between">
-                    <!-- Apply Now Button -->
+
+                <div class="mt-5 flex items-center gap-3">
                     {% if job.application_link %}
                     <a href="{{ job.application_link }}" target="_blank"
-                        class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        class="flex-1 text-center bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
                         Apply Now
                     </a>
                     {% endif %}
-                    <!-- More Info Button (Company Website) -->
+                    
                     {% if job.company_website %}
                     <a href="{{ job.company_website }}" target="_blank"
-                        class="inline-block bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+                        class="flex-1 text-center bg-gray-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300">
                         More Info
                     </a>
                     {% endif %}
@@ -34,6 +39,9 @@
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <p class="text-center text-gray-500 dark:text-gray-400 mt-8">No job postings available at the moment.</p>
+        {% endif %}
     </div>
 </section>
 

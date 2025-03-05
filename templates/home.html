@@ -5,36 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alumni Hub</title>  
     <script src="https://cdn.tailwindcss.com"></script>
-
-
+    <style>
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-900">
     {% block content %}
     {% include "navbar.html" %}
-    <div class="relative flex items-center justify-center h-screen overflow-hidden">
-        <div class="relative z-30 p-5 text-2xl text-white bg-opacity-50 rounded-xl">
-                <button class="px-4 py-2  border font-bold border-blue-500 b text-white rounded-lg hover:bg-white hover:text-black hover:animate-pulse">
-                    <a href="{% url "jobpost_list" %}">
-                        Check
-                    </a>
-                </button>
-            </div>
-        <video
-            autoplay
-            loop
-            muted
-            class="absolute z-10 w-auto min-w-full min-h-full max-w-none"
-        >
-            <source
-            src=""
-            type="video/mp4"
-            />
+
+    <!-- Hero Section with Background Video -->
+    <div class="relative flex items-center justify-center h-screen bg-gray-900">
+        <!-- Dark Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+        <!-- Content with Animations -->
+        <div class="relative z-10 text-center text-white">
+            <h1 class="text-4xl font-bold sm:text-5xl md:text-6xl tracking-wide opacity-0"
+                style="animation: fadeIn 1s ease-out forwards;">
+                Welcome to <span class="text-blue-400">Alumni Hub</span>
+            </h1>
+            <p class="mt-4 text-lg text-gray-200 sm:text-xl opacity-0"
+                style="animation: slideIn 1.2s ease-out forwards 0.5s;">
+                Stay connected, explore jobs, and grow your network.
+            </p>
+
+            <button class="mt-6 px-6 py-3 font-semibold border-2 border-blue-500 text-white rounded-lg transition duration-300 hover:bg-blue-500 hover:text-white hover:shadow-lg"
+                style="animation: slideIn 1.2s ease-out forwards 0.8s;"
+                onmouseover="this.style.animation='bounce 0.3s ease-in-out infinite alternate';"
+                onmouseout="this.style.animation='none';">
+                <a href="{% url 'jobpost_list' %}">Explore Jobs</a>
+            </button>
+        </div>
+
+        <!-- Background Video -->
+        <video autoplay loop muted class="absolute inset-0 w-full h-full object-cover">
+            <source src="" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-            
     </div>
-   
-   
 
     {% endblock content %}
 </body>
