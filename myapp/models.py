@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 class User(AbstractUser):
     groups = models.ManyToManyField(
@@ -50,6 +51,16 @@ class JobPost(models.Model):
 
     def __str__(self):
         return self.job_name
+    
+
+class Photo(models.Model):
+    title = models.CharField(max_length=100, blank=True, null=True)  # Optional title for the photo
+    description = models.TextField(blank=True, null=True)  # Optional description
+    image = models.ImageField(upload_to='photos/')  # Image field, uploads to 'photos/' directory
+    upload_date = models.DateTimeField(default=timezone.now)  # Automatically set to the current date and time
+
+    def __str__(self):
+        return self.title or f"Photo {self.id}"  # Return the title or a default string
 
 # Chat Model (Between Alumni & Students)
 # class ChatMessage(models.Model):

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import AlumniProfile, StudentProfile, JobPost
+from .models import AlumniProfile, StudentProfile, JobPost,Photo
 
 # 1. User Registration Form (Common for Students & Alumni)
 class UserRegisterForm(UserCreationForm):
@@ -37,6 +37,15 @@ class JobPostForm(forms.ModelForm):
             'company_website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Company Website Link'}),
         }
 
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ['title', 'description', 'image']  # Fields to include in the form
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter a title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter a description'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 # 5. Event Creation Form (For Admin)
 # class EventForm(forms.ModelForm):

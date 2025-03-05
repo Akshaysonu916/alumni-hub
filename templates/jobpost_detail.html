@@ -1,0 +1,45 @@
+{% extends "home.html" %}
+{% block content %}
+
+<section class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-6 py-12">
+    <div class="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        
+        <!-- Job Title -->
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">
+            {{ job.job_name }}
+        </h1>
+        
+        <!-- Company Name -->
+        <p class="text-lg font-medium text-gray-600 dark:text-gray-300">
+            <span class="text-gray-800 dark:text-gray-200 font-semibold">Company:</span> {{ job.company }}
+        </p>
+
+        <!-- Job Description -->
+        <p class="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+            {{ job.description }}
+        </p>
+
+        <!-- Job Type -->
+        <p class="mt-4 text-gray-700 dark:text-gray-300">
+            <span class="font-semibold text-blue-600 dark:text-blue-400">Job Type:</span> {{ job.get_job_type_display }}
+        </p>
+
+        <!-- Buttons Section -->
+        <div class="mt-6 flex flex-wrap gap-4">
+            {% if job.application_link %}
+            <a href="{{ job.application_link }}" target="_blank"
+                class="flex-1 text-center bg-blue-600 text-white font-medium px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300">
+                Apply Now
+            </a>
+            {% endif %}
+
+            <a href="{% url 'jobpost_list' %}" 
+                class="flex-1 text-center bg-gray-500 text-white font-medium px-6 py-3 rounded-lg hover:bg-gray-600 transition duration-300">
+                Back to List
+            </a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "home.html" %}
+{% block content %}
+{% include 'navbar.html' %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for photo in photos %}
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-900">{{ photo.title }}</h2>
+                <p class="text-sm text-gray-600">{{ photo.description }}</p>
+                <p class="text-xs text-gray-500 mt-2">Uploaded on {{ photo.upload_date|date:"F j, Y" }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mt-6">
+        <a href="{% url 'upload_photo' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Upload a Photo
+        </a>
+    </div>
+</div>
+{% endblock %}

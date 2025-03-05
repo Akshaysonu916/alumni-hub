@@ -21,7 +21,14 @@
                     <span class="font-semibold text-blue-600 dark:text-blue-400">Job Type:</span> {{ job.get_job_type_display }}
                 </p>
 
-                <div class="mt-5 flex items-center gap-3">
+                <!-- Buttons Section -->
+                <div class="mt-5 flex flex-wrap gap-3">
+                    <!-- View Details Button -->
+                    <a href="{% url 'jobpost_detail' job.id %}" 
+                        class="flex-1 text-center bg-green-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300">
+                        View Details
+                    </a>
+
                     {% if job.application_link %}
                     <a href="{{ job.application_link }}" target="_blank"
                         class="flex-1 text-center bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
