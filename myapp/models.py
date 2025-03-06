@@ -16,6 +16,18 @@ class User(AbstractUser):
         blank=True
     )
 
+# class User(AbstractUser):
+#     is_alumni = models.BooleanField(default=False)
+#     is_student = models.BooleanField(default=False)
+#     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+#     bio = models.TextField(blank=True, null=True)
+#     graduation_year = models.IntegerField(null=True, blank=True)
+#     degree_program = models.CharField(max_length=100, blank=True, null=True)
+
+#     def __str__(self):
+#         return self.username
+
+
 # Alumni Profile Model
 class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_profile')
@@ -43,7 +55,7 @@ class JobPost(models.Model):
     description = models.TextField(blank=True)  # Changed to TextField
     job_type = models.CharField(
         max_length=100,
-        choices=[("FT", "Full-Time"), ("PT", "Part-Time"),("IS", "Intern-Ship")],
+        choices=[("FT", "Full-Time"), ("PT", "Part-Time"),("IS", "Intern-Ship"),("RT", "Remote-Job")],
         default=4  # Added default value
     )
     application_link = models.URLField(blank=True, null=True)  # Allowing blank values

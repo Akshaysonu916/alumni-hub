@@ -11,25 +11,64 @@
             </div>
             <form method="POST" class="space-y-5">
                 {% csrf_token %}
-                {% for field in form %}
+
+                <!-- Job Name -->
                 <div>
-                    <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
-                    <input 
-                        type="{{ field.field.widget.input_type }}"
-                        name="{{ field.name }}" 
-                        id="{{ field.id_for_label }}"
+                    <label for="{{ form.job_name.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Job Name</label>
+                    <input type="text" name="{{ form.job_name.name }}" id="{{ form.job_name.id_for_label }}"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
-                        {% if field.value != None %} value="{{ field.value|stringformat:'s' }}" {% endif %}
-                        placeholder="{{ field.help_text }}"
-                    />
-                    {% if field.errors %}
-                        <p class="mt-2 text-sm text-red-500">{{ field.errors }}</p>
-                    {% endif %}
+                        placeholder="Enter job title" required>
                 </div>
-                {% endfor %}
+
+                <!-- Company Name -->
+                <div>
+                    <label for="{{ form.company.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Company Name</label>
+                    <input type="text" name="{{ form.company.name }}" id="{{ form.company.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+                        placeholder="Enter company name" required>
+                </div>
+
+                <!-- Job Description -->
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Job Description</label>
+                    <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+                        placeholder="Enter job description"></textarea>
+                </div>
+
+                <!-- Job Type Dropdown -->
+                <div>
+                    <label for="{{ form.job_type.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Job Type</label>
+                    <select name="{{ form.job_type.name }}" id="{{ form.job_type.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400">
+                        <option value="FT">Full-Time</option>
+                        <option value="PT">Part-Time</option>
+                        <option value="IS">Intern-Ship</option>
+                        <option value="RT">Remote-Job</option>
+                    </select>
+                </div>
+
+                <!-- Application Link -->
+                <div>
+                    <label for="{{ form.application_link.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Application Link</label>
+                    <input type="url" name="{{ form.application_link.name }}" id="{{ form.application_link.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+                        placeholder="Enter application link (if available)">
+                </div>
+
+                <!-- Company Website -->
+                <div>
+                    <label for="{{ form.company_website.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Company Website</label>
+                    <input type="url" name="{{ form.company_website.name }}" id="{{ form.company_website.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+                        placeholder="Enter company website (if available)">
+                </div>
+
+                <!-- Submit Button -->
                 <button type="submit" class="w-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all duration-300 shadow-md">
                     Add Job Post
                 </button>
+
             </form>
         </div>
     </div>

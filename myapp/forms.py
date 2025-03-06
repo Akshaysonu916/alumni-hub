@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import AlumniProfile, StudentProfile, JobPost,Photo
+from .models import *
 
 # 1. User Registration Form (Common for Students & Alumni)
 class UserRegisterForm(UserCreationForm):

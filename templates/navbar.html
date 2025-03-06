@@ -10,8 +10,15 @@
                 <span class="tracking-wide">Alumni Hub</span>
             </a>
 
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
             <!-- Navigation Links -->
-            <div class="flex items-center space-x-4">
+            <div id="menu" class="hidden md:flex md:items-center md:space-x-4 flex-col md:flex-row absolute md:static bg-gray-900 md:bg-transparent w-full md:w-auto top-16 left-0 md:top-auto md:left-auto py-4 md:py-0 z-50">
                 {% if user.is_authenticated %}
                     {% if not user.is_superuser %}
                         <!-- Regular User Links -->
@@ -47,4 +54,13 @@
 
         </div>
     </nav>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        document.getElementById('menu-btn').addEventListener('click', function () {
+            let menu = document.getElementById('menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+
 </body>
