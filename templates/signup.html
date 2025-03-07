@@ -1,73 +1,119 @@
 {% extends "home.html" %} 
 {% block content %} 
-{% include "navbar.html" %}
 
-<!-- Centering Container -->
-<div class="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-    <section class="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg space-y-6">
-        
-        <!-- Logo & Heading -->
-        <div class="text-center">
-            <a href="#" class="flex items-center justify-center space-x-2 text-2xl font-semibold text-gray-900 dark:text-white">
-                <img class="w-10 h-10" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" alt="logo">
-                <span>Alumni Hub</span>
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-r from-amber-50 to-yellow-100 p-4">
+    <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-lg border border-amber-200">
+        <div class="flex flex-col items-center text-center">
+            <a href="#" class="flex items-center space-x-3">
+                <img class="w-12 h-12 rounded-full shadow-md border-2 border-amber-300" 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" 
+                    alt="logo">
+                <span class="text-3xl font-serif font-bold text-amber-800">Alumni Hub</span>
             </a>
-            <h1 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">Create an Account</h1>
+            <h1 class="text-2xl font-serif font-semibold text-gray-800 mt-4">Create an Account</h1>
+            <p class="text-gray-600 font-serif italic">Sign up to get started</p>
+            <div class="w-20 h-1 bg-amber-500 mt-3 rounded-full"></div>
         </div>
 
-        <!-- Form -->
-        <form action="{% url 'signup' %}" method="POST" class="space-y-5">
+        <form class="mt-6 space-y-4" action="{% url 'signup' %}" method="POST">
             {% csrf_token %}
+            
+            <div class="grid gap-4">
+                <div>
+                    <label for="email" class="block text-sm font-serif font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" name="email" id="email" 
+                        class="w-full p-3 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
+                        placeholder="Enter your email" required>
+                </div>
 
-            <!-- Email -->
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Your Email</label>
-                <input type="email" name="email" id="email" placeholder="name@company.com" required
-                    class="w-full p-3 mt-1 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-            </div>
+                <div>
+                    <label for="username" class="block text-sm font-serif font-medium text-gray-700 mb-1">Your Name</label>
+                    <input type="text" name="username" id="username" 
+                        class="w-full p-3 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
+                        placeholder="Enter your name" required>
+                </div>
 
-            <!-- Username -->
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
-                <input type="text" name="username" id="username" placeholder="Your Name" required
-                    class="w-full p-3 mt-1 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-            </div>
+                <div class="relative">
+                    <label for="password" class="block text-sm font-serif font-medium text-gray-700 mb-1">Password</label>
+                    <div class="relative">
+                        <input type="password" name="password" id="password"
+                            class="w-full p-3 pr-10 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
+                            placeholder="Create a password" required>
+                        <span id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                            <i id="eyeIcon1" class="fas fa-eye-slash text-amber-600 hover:text-amber-800"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <label for="confirm-password" class="block text-sm font-serif font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" name="confirm_password" id="confirm-password"
+                            class="w-full p-3 pr-10 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
+                            placeholder="Confirm your password" required>
+                        <span id="toggleConfirmPassword" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+                            <i id="eyeIcon2" class="fas fa-eye-slash text-amber-600 hover:text-amber-800"></i>
+                        </span>
+                    </div>
+                </div>
+                
 
-            <!-- Password -->
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" required
-                    class="w-full p-3 mt-1 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-
-            <!-- Confirm Password -->
-            <div>
-                <label for="confirm-password" class="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
-                <input type="password" name="confirm_password" id="confirm-password" placeholder="••••••••" required
-                    class="w-full p-3 mt-1 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-
-            <!-- Terms & Conditions -->
-            <div class="flex items-center">
-                <input id="terms" type="checkbox" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                <label for="terms" class="ml-2 text-sm text-gray-600 dark:text-gray-300">
-                    I accept the <a href="#" class="text-blue-600 hover:underline">Terms and Conditions</a>
+            <div class="flex items-center mt-2">
+                <input id="terms" type="checkbox" class="mr-2 w-4 h-4 border border-gray-300 rounded accent-amber-600" required>
+                <label for="terms" class="text-sm text-gray-600 font-serif">
+                    I accept the <a href="#" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Terms and Conditions</a>
                 </label>
             </div>
 
-            <!-- Sign Up Button -->
             <button type="submit"
-                class="w-full px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                class="w-full bg-amber-700 text-white font-serif font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-amber-800 transition transform hover:scale-105 border border-amber-800 mt-4">
                 Sign Up
             </button>
-
-            <!-- Already have an account -->
-            <p class="text-sm text-center text-gray-500 dark:text-gray-400">
-                Already have an account?
-                <a href="{% url 'signin' %}" class="text-blue-600 hover:underline">Login here</a>
-            </p>
         </form>
-    </section>
-</div>
+
+        <div class="flex items-center my-6">
+            <div class="flex-grow h-px bg-amber-200"></div>
+            <span class="px-3 text-sm text-amber-600 font-serif">or</span>
+            <div class="flex-grow h-px bg-amber-200"></div>
+        </div>
+
+        <p class="text-sm text-gray-600 text-center font-serif">
+            Already have an account? 
+            <a href="{% url 'signin' %}" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Sign in</a>
+        </p>
+    </div>
+</section>
+
+<!-- FontAwesome & Script for Password Toggle -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+    // Toggle Password Visibility
+    document.getElementById("togglePassword").addEventListener("click", function() {
+        let passwordField = document.getElementById("password");
+        let eyeIcon = document.getElementById("eyeIcon1");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye"); 
+        } else {
+            passwordField.type = "password";
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash"); 
+        }
+    });
+
+    // Toggle Confirm Password Visibility
+    document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
+        let confirmPasswordField = document.getElementById("confirm-password");
+        let eyeIcon = document.getElementById("eyeIcon2");
+
+        if (confirmPasswordField.type === "password") {
+            confirmPasswordField.type = "text";
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye"); 
+        } else {
+            confirmPasswordField.type = "password";
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash"); 
+        }
+    });
+</script>
 
 {% endblock %}
