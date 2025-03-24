@@ -3,27 +3,12 @@ from django.db import models
 from django.utils import timezone
 
 class User(AbstractUser):
-    groups = models.ManyToManyField(
-        "auth.Group",
-        related_name="custom_user_groups",  # Unique related_name
-        blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        "auth.Permission",
-        related_name="custom_user_permissions",  # Unique related_name
-        blank=True
-    )
+    USER_TYPES = [
+        ('alumni', 'Alumni'),
+        ('student', 'Student'),
+    ]
+    user_type = models.CharField(max_length=10, choices=USER_TYPES, default='student')
 
-# class User(AbstractUser):
-#     is_alumni = models.BooleanField(default=False)
-#     is_student = models.BooleanField(default=False)
-#     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-#     bio = models.TextField(blank=True, null=True)
-#     graduation_year = models.IntegerField(null=True, blank=True)
-#     degree_program = models.CharField(max_length=100, blank=True, null=True)
-
-#     def __str__(self):
-#         return self.username
 
 
 # Alumni Profile Model

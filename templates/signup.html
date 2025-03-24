@@ -1,119 +1,82 @@
 {% extends "home.html" %} 
 {% block content %} 
+<body class="bg-gray-100">
+  <div class="container mx-auto mt-10 p-8 bg-white rounded-lg shadow-md max-w-lg">
+    <h2 class="text-2xl font-bold mb-6">Sign Up</h2>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
 
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-r from-amber-50 to-yellow-100 p-4">
-    <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-lg border border-amber-200">
-        <div class="flex flex-col items-center text-center">
-            <a href="#" class="flex items-center space-x-3">
-                <img class="w-12 h-12 rounded-full shadow-md border-2 border-amber-300" 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" 
-                    alt="logo">
-                <span class="text-3xl font-serif font-bold text-amber-800">Alumni Hub</span>
-            </a>
-            <h1 class="text-2xl font-serif font-semibold text-gray-800 mt-4">Create an Account</h1>
-            <p class="text-gray-600 font-serif italic">Sign up to get started</p>
-            <div class="w-20 h-1 bg-amber-500 mt-3 rounded-full"></div>
+      <div>
+        <label for="username" class="block text-gray-700 font-medium">Username</label>
+        <input type="text" id="username" name="username" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+      </div>
+
+      <div>
+        <label for="email" class="block text-gray-700 font-medium">Email</label>
+        <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+      </div>
+
+      <div>
+        <label for="password1" class="block text-gray-700 font-medium">Password</label>
+        <div class="relative">
+          <input type="password" id="password1" name="password1" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+          <button type="button" onclick="togglePassword('password1', 'togglePassword1')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+            <span id="togglePassword1">👁️</span>
+          </button>
         </div>
+      </div>
 
-        <form class="mt-6 space-y-4" action="{% url 'signup' %}" method="POST">
-            {% csrf_token %}
-            
-            <div class="grid gap-4">
-                <div>
-                    <label for="email" class="block text-sm font-serif font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" id="email" 
-                        class="w-full p-3 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
-                        placeholder="Enter your email" required>
-                </div>
-
-                <div>
-                    <label for="username" class="block text-sm font-serif font-medium text-gray-700 mb-1">Your Name</label>
-                    <input type="text" name="username" id="username" 
-                        class="w-full p-3 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
-                        placeholder="Enter your name" required>
-                </div>
-
-                <div class="relative">
-                    <label for="password" class="block text-sm font-serif font-medium text-gray-700 mb-1">Password</label>
-                    <div class="relative">
-                        <input type="password" name="password" id="password"
-                            class="w-full p-3 pr-10 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
-                            placeholder="Create a password" required>
-                        <span id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                            <i id="eyeIcon1" class="fas fa-eye-slash text-amber-600 hover:text-amber-800"></i>
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="relative">
-                    <label for="confirm-password" class="block text-sm font-serif font-medium text-gray-700 mb-1">Confirm Password</label>
-                    <div class="relative">
-                        <input type="password" name="confirm_password" id="confirm-password"
-                            class="w-full p-3 pr-10 border border-amber-300 rounded-lg bg-amber-50 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition font-serif"
-                            placeholder="Confirm your password" required>
-                        <span id="toggleConfirmPassword" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                            <i id="eyeIcon2" class="fas fa-eye-slash text-amber-600 hover:text-amber-800"></i>
-                        </span>
-                    </div>
-                </div>
-                
-
-            <div class="flex items-center mt-2">
-                <input id="terms" type="checkbox" class="mr-2 w-4 h-4 border border-gray-300 rounded accent-amber-600" required>
-                <label for="terms" class="text-sm text-gray-600 font-serif">
-                    I accept the <a href="#" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Terms and Conditions</a>
-                </label>
-            </div>
-
-            <button type="submit"
-                class="w-full bg-amber-700 text-white font-serif font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-amber-800 transition transform hover:scale-105 border border-amber-800 mt-4">
-                Sign Up
-            </button>
-        </form>
-
-        <div class="flex items-center my-6">
-            <div class="flex-grow h-px bg-amber-200"></div>
-            <span class="px-3 text-sm text-amber-600 font-serif">or</span>
-            <div class="flex-grow h-px bg-amber-200"></div>
+      <div>
+        <label for="password2" class="block text-gray-700 font-medium">Confirm Password</label>
+        <div class="relative">
+          <input type="password" id="password2" name="password2" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+          <button type="button" onclick="togglePassword('password2', 'togglePassword2')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+            <span id="togglePassword2">👁️</span>
+          </button>
         </div>
+      </div>
 
-        <p class="text-sm text-gray-600 text-center font-serif">
-            Already have an account? 
-            <a href="{% url 'signin' %}" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Sign in</a>
-        </p>
-    </div>
-</section>
+      <div>
+        <label for="user_type" class="block text-gray-700 font-medium">User Type</label>
+        <select id="user_type" name="user_type" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+          <option value="student">Student</option>
+          <option value="alumni">Alumni</option>
+        </select>
+      </div>
 
-<!-- FontAwesome & Script for Password Toggle -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-<script>
-    // Toggle Password Visibility
-    document.getElementById("togglePassword").addEventListener("click", function() {
-        let passwordField = document.getElementById("password");
-        let eyeIcon = document.getElementById("eyeIcon1");
+      <p class="text-sm text-gray-600 text-center font-serif">
+        Already have an account? 
+        <a href="{% url 'signin' %}" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Sign in</a>
+      </p>
 
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            eyeIcon.classList.replace("fa-eye-slash", "fa-eye"); 
-        } else {
-            passwordField.type = "password";
-            eyeIcon.classList.replace("fa-eye", "fa-eye-slash"); 
-        }
-    });
+      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Sign Up</button>
+    </form>
 
-    // Toggle Confirm Password Visibility
-    document.getElementById("toggleConfirmPassword").addEventListener("click", function() {
-        let confirmPasswordField = document.getElementById("confirm-password");
-        let eyeIcon = document.getElementById("eyeIcon2");
+    {% if form.errors %}
+      <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        <ul>
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li><strong>{{ field|title }}</strong>: {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
 
-        if (confirmPasswordField.type === "password") {
-            confirmPasswordField.type = "text";
-            eyeIcon.classList.replace("fa-eye-slash", "fa-eye"); 
-        } else {
-            confirmPasswordField.type = "password";
-            eyeIcon.classList.replace("fa-eye", "fa-eye-slash"); 
-        }
-    });
-</script>
-
-{% endblock %}
+  <script>
+    function togglePassword(inputId, toggleId) {
+      const input = document.getElementById(inputId);
+      const toggle = document.getElementById(toggleId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        toggle.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        toggle.textContent = '👁️';
+      }
+    }
+  </script>
+</body>
+{% endblock content %}

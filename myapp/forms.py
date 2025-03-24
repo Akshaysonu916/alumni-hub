@@ -5,17 +5,22 @@ from .models import *
 
 # 1. User Registration Form (Common for Students & Alumni)
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
+    user_type = forms.ChoiceField(choices=User.USER_TYPES, label="User Type")
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'user_type']
 
-# 2. Alumni Profile Update Form
-# class AlumniProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = AlumniProfile
-#         fields = ['full_name', 'current_company', 'contact_number', 'linkedin_profile', 'bio']
+class AlumniProfileForm(forms.ModelForm):
+    class Meta:
+        model = AlumniProfile
+        fields = ['company', 'job_title', 'graduation_year', 'linkedin']
+        widgets = {
+            'company': forms.TextInput(attrs={'class': 'border border-black'}),
+            'job_title': forms.TextInput(attrs={'class': 'border border-black'}),
+            'graduation_year': forms.NumberInput(attrs={'class': 'border border-black'}),
+            'linkedin': forms.URLInput(attrs={'class': 'border border-black'}),
+        }
 
 # 3. Student Profile Update Form
 # class StudentProfileForm(forms.ModelForm):
