@@ -4,12 +4,18 @@ from django.contrib.auth.models import User
 from .models import *
 
 # 1. User Registration Form (Common for Students & Alumni)
-class UserRegisterForm(UserCreationForm):
-    user_type = forms.ChoiceField(choices=User.USER_TYPES, label="User Type")
-
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, required=True)
+    is_alumni = forms.BooleanField(required=False, initial=False, label="Are you an Alumni?")
+    is_student = forms.BooleanField(required=False, initial=True, label="Are you a Student?")
+    
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'user_type']
+        fields = ('username', 'email', 'password1', 'password2', 'is_alumni', 'is_student')
+
+class SignInForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput)
 
 class AlumniProfileForm(forms.ModelForm):
     class Meta:

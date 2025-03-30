@@ -1,13 +1,13 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser,Group,Permission
 from django.db import models
 from django.utils import timezone
 
 class User(AbstractUser):
-    USER_TYPES = [
-        ('alumni', 'Alumni'),
-        ('student', 'Student'),
-    ]
-    user_type = models.CharField(max_length=10, choices=USER_TYPES, default='student')
+    is_alumni = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
+
+    groups = models.ManyToManyField(Group, related_name="custom_user_groups", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="custom_user_permissions", blank=True)
 
 
 

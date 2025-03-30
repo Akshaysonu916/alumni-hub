@@ -1,82 +1,120 @@
-{% extends "home.html" %} 
-{% block content %} 
-<body class="bg-gray-100">
-  <div class="container mx-auto mt-10 p-8 bg-white rounded-lg shadow-md max-w-lg">
-    <h2 class="text-2xl font-bold mb-6">Sign Up</h2>
-    <form method="post" class="space-y-4">
+{% extends "home.html" %}
+{% block content %}
+{% include "navbar.html" %}
+
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+  <div class="w-full max-w-md p-8 bg-white shadow-xl rounded-2xl">
+    <h2 class="text-3xl font-extrabold text-center text-gray-800">Create an Account</h2>
+    <p class="text-center text-gray-500 mt-2">Join the Alumni-Student Portal today!</p>
+
+    <form method="POST" class="mt-6 space-y-4">
       {% csrf_token %}
 
-      <div>
-        <label for="username" class="block text-gray-700 font-medium">Username</label>
-        <input type="text" id="username" name="username" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+      <!-- Username -->
+      <div class="relative">
+        <input 
+          type="text" 
+          name="username" 
+          placeholder="Username" 
+          required 
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
+        >
+        <span class="absolute right-4 top-3 text-gray-400">
+          <i class="fas fa-user"></i>
+        </span>
       </div>
 
-      <div>
-        <label for="email" class="block text-gray-700 font-medium">Email</label>
-        <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+      <!-- Email -->
+      <div class="relative">
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="Email" 
+          required 
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
+        >
+        <span class="absolute right-4 top-3 text-gray-400">
+          <i class="fas fa-envelope"></i>
+        </span>
       </div>
 
-      <div>
-        <label for="password1" class="block text-gray-700 font-medium">Password</label>
-        <div class="relative">
-          <input type="password" id="password1" name="password1" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
-          <button type="button" onclick="togglePassword('password1', 'togglePassword1')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
-            <span id="togglePassword1">👁️</span>
-          </button>
-        </div>
+      <!-- Password -->
+      <div class="relative">
+        <input 
+          type="password" 
+          name="password1" 
+          placeholder="Password" 
+          required 
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
+        >
+        <span class="absolute right-4 top-3 text-gray-400">
+          <i class="fas fa-lock"></i>
+        </span>
       </div>
 
-      <div>
-        <label for="password2" class="block text-gray-700 font-medium">Confirm Password</label>
-        <div class="relative">
-          <input type="password" id="password2" name="password2" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
-          <button type="button" onclick="togglePassword('password2', 'togglePassword2')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
-            <span id="togglePassword2">👁️</span>
-          </button>
-        </div>
+      <!-- Confirm Password -->
+      <div class="relative">
+        <input 
+          type="password" 
+          name="password2" 
+          placeholder="Confirm Password" 
+          required 
+          class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
+        >
+        <span class="absolute right-4 top-3 text-gray-400">
+          <i class="fas fa-lock"></i>
+        </span>
       </div>
 
-      <div>
-        <label for="user_type" class="block text-gray-700 font-medium">User Type</label>
-        <select id="user_type" name="user_type" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
-          <option value="student">Student</option>
-          <option value="alumni">Alumni</option>
-        </select>
+      <!-- Role Selection -->
+      <div class="flex items-center justify-between mt-2">
+        <label class="flex items-center">
+          <input type="checkbox" name="is_alumni" class="mr-2 rounded">
+          <span class="text-gray-700">I am an Alumni</span>
+        </label>
+        <label class="flex items-center">
+          <input type="checkbox" name="is_student" class="mr-2 rounded" checked>
+          <span class="text-gray-700">I am a Student</span>
+        </label>
       </div>
 
-      <p class="text-sm text-gray-600 text-center font-serif">
-        Already have an account? 
-        <a href="{% url 'signin' %}" class="text-amber-700 font-medium hover:underline hover:text-amber-900">Sign in</a>
-      </p>
-
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Sign Up</button>
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition duration-300 shadow-md"
+      >
+        Sign Up
+      </button>
     </form>
 
-    {% if form.errors %}
-      <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-        <ul>
-          {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-              <li><strong>{{ field|title }}</strong>: {{ error }}</li>
-            {% endfor %}
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
+    <!-- Login Link -->
+    <p class="mt-4 text-center text-gray-600">
+      Already have an account? 
+      <a href="{% url 'signin' %}" class="text-blue-500 hover:underline font-semibold">Log in</a>
+    </p>
+
+    <!-- Decorative Line -->
+    <div class="relative flex py-5 items-center">
+      <div class="flex-grow border-t border-gray-300"></div>
+      <span class="flex-shrink mx-4 text-gray-400">OR</span>
+      <div class="flex-grow border-t border-gray-300"></div>
+    </div>
+
+    <!-- Social Signup -->
+    <div class="flex space-x-4 justify-center">
+      <button class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg shadow-sm">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Facebook.svg" alt="Facebook" class="w-5 h-5">
+        <span class="text-gray-700">Sign up with Facebook</span>
+      </button>
+      <button class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg shadow-sm">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" class="w-5 h-5">
+        <span class="text-gray-700">Sign up with Google</span>
+      </button>
+    </div>
   </div>
 
-  <script>
-    function togglePassword(inputId, toggleId) {
-      const input = document.getElementById(inputId);
-      const toggle = document.getElementById(toggleId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        toggle.textContent = '🙈';
-      } else {
-        input.type = 'password';
-        toggle.textContent = '👁️';
-      }
-    }
-  </script>
+  <!-- FontAwesome for Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
+
 {% endblock content %}

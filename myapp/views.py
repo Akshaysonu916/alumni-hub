@@ -20,26 +20,15 @@ def add_job(request):
 
 
 def signup_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        user_type = request.POST.get('user_type')
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('signin')  # Redirect to login after successful signup
+    else:
+        form = SignUpForm()  # Ensure 'form' is always defined
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
-            return redirect('signup')
-
-        if password1 != password2:
-            messages.error(request, "Passwords do not match.")
-            return redirect('signup')
-
-        user = User.objects.create_user(username=username, email=email, password=password1, user_type=user_type)
-        messages.success(request, "Account created successfully! Please log in.")
-        return redirect('signin')
-
-    return render(request, 'signup.html')
+    return render(request, 'signup.html', {'form': form})
 
 def signin_view(request):
     if request.method == 'POST':

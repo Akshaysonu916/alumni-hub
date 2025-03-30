@@ -1,7 +1,8 @@
-{% extends "home.html" %} 
+{% extends "home.html" %}
 {% block content %} 
-<section class="min-h-screen flex items-center justify-center bg-gradient-to-r from-amber-50 to-gray-100">
-    <div class="bg-yellow shadow-xl rounded-lg p-10 w-full max-w-md border border-amber-200">
+{% include "navbar.html" %}
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-r from-amber-50 to-gray-100 p-4">
+    <div class="bg-yellow shadow-xl rounded-lg p-6 md:p-10 w-full max-w-md border border-amber-200">
         <div class="flex flex-col items-center">
             <a href="#" class="flex items-center space-x-3">
                 <img class="w-12 h-12 rounded-full shadow-md border-2 border-amber-300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" alt="logo">
@@ -26,7 +27,7 @@
                     class="w-full p-3 border-2 border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-sm bg-amber-50 font-serif"
                     placeholder="Enter your password" required>
                 <!-- Eye Button (Initially Closed) -->
-                <span id="togglePassword" class="absolute inset-y-0 right-3 flex items-center cursor-pointer" style="top: 30px;">
+                <span id="togglePassword" class="absolute inset-y-0 right-3 flex items-center cursor-pointer top-9">
                     <i id="eyeIcon" class="fas fa-eye-slash text-amber-600 hover:text-amber-800"></i>
                 </span>
             </div>
@@ -58,10 +59,10 @@
 
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            eyeIcon.classList.replace("fa-eye-slash", "fa-eye"); // Open eye when password is visible
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
         } else {
             passwordField.type = "password";
-            eyeIcon.classList.replace("fa-eye", "fa-eye-slash"); // Closed eye when password is hidden
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
         }
     });
 </script>

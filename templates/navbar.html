@@ -20,18 +20,18 @@
             <!-- Navigation Links -->
             <div id="menu" class="hidden md:flex md:items-center md:space-x-4 flex-col md:flex-row absolute md:static bg-gray-900 md:bg-transparent w-full md:w-auto top-16 left-0 md:top-auto md:left-auto py-4 md:py-0 z-50">
                 {% if user.is_authenticated %}
-                    {% if not user.is_superuser %}
-                        <!-- Regular User Links -->
+                    {% if user.is_alumni or user.is_admin %}
+                        <!-- Alumni and Admin User Links -->
                         <a href="{% url 'add_jobs' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                             Add Jobs
                         </a>
-                        <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Jobs
-                        </a>
-                        <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Gallery
-                        </a>
                     {% endif %}
+                    <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                        Jobs
+                    </a>
+                    <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                        Gallery
+                    </a>
 
                     <!-- Sign Out button (always last) -->
                     <form action="{% url 'signout' %}" method="post">
@@ -61,5 +61,4 @@
             menu.classList.toggle('hidden');
         });
     </script>
-
 </body>
