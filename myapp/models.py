@@ -49,13 +49,14 @@ class JobPost(models.Model):
     
 
 class Photo(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)  # Optional title for the photo
-    description = models.TextField(blank=True, null=True)  # Optional description
-    image=models.ImageField(upload_to='images') # Image field, uploads to 'photos/' directory
-    upload_date = models.DateTimeField(default=timezone.now)  # Automatically set to the current date and time
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Track who uploaded the photo
+    title = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='images')
+    upload_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.title or f"Photo {self.id}"  # Return the title or a default string
+        return self.title or f"Photo {self.id}"# Return the title or a default string
 
 # Chat Model (Between Alumni & Students)
 # class ChatMessage(models.Model):

@@ -1,0 +1,33 @@
+{% extends "home.html" %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ photo.title }}</h1>
+    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full h-96 object-cover rounded-lg shadow-lg">
+    <p class="text-gray-700 mt-4">{{ photo.description }}</p>
+    <p class="text-sm text-gray-500 mt-2">Uploaded on {{ photo.upload_date|date:"F j, Y" }}</p>
+
+    <!-- Buttons based on User Roles -->
+    <div class="mt-6 flex gap-4">
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+                <!-- Superuser: Delete Only -->
+                <a href="{% url 'delete_photo' id=photo.id %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    Delete Photo
+                </a>
+            {% elif request.user.is_staff %}
+                <!-- Alumni: Only View Details -->
+                <p class="text-blue-600 font-semibold">You are viewing this photo as an Alumni.</p>
+            {% else %}
+                <!-- Regular Users: Edit and Delete -->
+                <a href="{% url 'edit_photo' id=photo.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Edit Photo
+                </a>
+                <a href="{% url 'delete_photo' id=photo.id %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    Delete Photo
+                </a>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'photo_gallery' %}" class="text-gray-600 hover:underline">Back to Gallery</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'home.html' %}
+{% block content %}
+  <h2>Edit Job Post: {{ jobpost.job_name }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Job</button>
+  </form>
+  <a href="{% url 'jobpost_list' %}">Back to Job List</a>
+{% endblock %}

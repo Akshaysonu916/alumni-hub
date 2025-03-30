@@ -54,6 +54,8 @@ def logout_view(request):
     logout(request)
     return redirect('signin')
 
+
+#job posts all operations
 @login_required(login_url='signin')
 def jobpost_list(request):
     jobs = JobPost.objects.all()  # Fetch all job posts
@@ -63,11 +65,32 @@ def userjobs_view(request):
     jobs = JobPost.objects.all()
     return render(request, 'userjobs.html', {'jobs': jobs})
 
-def job_post_detail(request, pk):
-    job = get_object_or_404(JobPost, pk=pk)
+def job_post_detail(request, job_id):
+    job = get_object_or_404(JobPost, id=job_id)
     return render(request, 'jobpost_detail.html', {'job': job})
 
 
+def edit_jobpost(request, job_id):
+    jobpost = get_object_or_404(JobPost, id=job_id)
+    if request.method == 'POST':
+        form = JobPostForm(request.POST, instance=jobpost)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Job post updated successfully.')
+            return redirect('jobpost_detail', job_id=jobpost.id)
+    else:
+        form = JobPostForm(instance=jobpost)
+    return render(request, 'edit_jobpost.html', {'form': form, 'jobpost': jobpost})
+
+def delete_jobpost(request, job_id):
+    jobpost = get_object_or_404(JobPost, id=job_id)
+    if request.method == 'POST':
+        jobpost.delete()
+        messages.success(request, 'Job post deleted successfully.')
+        return redirect('jobpost_list')
+    return render(request, 'confirm_delete.html', {'jobpost': jobpost})
+
+# photos sections
 # View to display the photo gallery
 @login_required(login_url='signin')
 def photo_gallery(request):
@@ -84,3 +107,44 @@ def upload_photo(request):
     else:
         form = PhotoForm()  # Render an empty form for GET requests
     return render(request, 'upload_photo.html', {'form': form})
+
+
+
+
+def photo_detail(request, id):
+    photo = get_object_or_404(Photo, id=id)
+    return render(request, 'photo_detail.html', {'photo': photo})
+
+
+def edit_photo(request, id):
+    photo = get_object_or_404(Photo, id=id)
+    
+    if request.user != photo.user and not request.user.is_superuser:
+        messages.error(request, "You are not authorized to edit this photo.")
+        return redirect('photo_gallery')
+
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES, instance=photo)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Photo updated successfully!")
+            return redirect('photo_detail', id=photo.id)
+    else:
+        form = PhotoForm(instance=photo)
+
+    return render(request, 'edit_photo.html', {'form': form, 'photo': photo})
+
+
+def delete_photo(request, id):
+    photo = get_object_or_404(Photo, id=id)
+    
+    if request.user != photo.user and not request.user.is_superuser:
+        messages.error(request, "You are not authorized to delete this photo.")
+        return redirect('photo_gallery')
+
+    if request.method == 'POST':
+        photo.delete()
+        messages.success(request, "Photo deleted successfully!")
+        return redirect('photo_gallery')
+
+    return render(request, 'delete_photo.html', {'photo': photo})
