@@ -23,6 +23,7 @@
           <span class="absolute right-4 top-3 text-gray-400">
             <i class="fas fa-user"></i>
           </span>
+          <p class="text-red-500 text-sm">{{ form.username.errors }}</p>
         </div>
 
         <!-- Email -->
@@ -37,6 +38,7 @@
           <span class="absolute right-4 top-3 text-gray-400">
             <i class="fas fa-envelope"></i>
           </span>
+          <p class="text-red-500 text-sm">{{ form.email.errors }}</p>
         </div>
 
         <!-- Password -->
@@ -51,6 +53,7 @@
           <span class="absolute right-4 top-3 text-gray-400">
             <i class="fas fa-lock"></i>
           </span>
+          <p class="text-red-500 text-sm">{{ form.password1.errors }}</p>
         </div>
 
         <!-- Confirm Password -->
@@ -65,19 +68,21 @@
           <span class="absolute right-4 top-3 text-gray-400">
             <i class="fas fa-lock"></i>
           </span>
+          <p class="text-red-500 text-sm">{{ form.password2.errors }}</p>
         </div>
 
         <!-- Role Selection (Radio Buttons for Single Selection) -->
         <div class="flex items-center justify-between mt-2">
           <label class="flex items-center">
-            <input type="radio" name="role" value="alumni" class="mr-2 rounded">
+            <input type="radio" name="user_type" value="alumni" class="mr-2 rounded">
             <span class="text-gray-700">I am an Alumni</span>
           </label>
           <label class="flex items-center">
-            <input type="radio" name="role" value="student" class="mr-2 rounded" checked>
+            <input type="radio" name="user_type" value="student" class="mr-2 rounded" checked>
             <span class="text-gray-700">I am a Student</span>
           </label>
         </div>
+        <p class="text-red-500 text-sm">{{ form.user_type.errors }}</p>
 
         <!-- Submit Button -->
         <button 

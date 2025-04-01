@@ -16,7 +16,7 @@ class AlumniProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='alumni_profile')
     company = models.CharField(max_length=255, blank=True, null=True)
     job_title = models.CharField(max_length=255, blank=True, null=True)
-    graduation_year = models.PositiveIntegerField()
+    graduation_year = models.PositiveIntegerField(default=2025)
     linkedin = models.URLField(blank=True, null=True)
 
     def __str__(self):

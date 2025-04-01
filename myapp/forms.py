@@ -6,13 +6,27 @@ from .models import *
 # 1. User Registration Form (Common for Students & Alumni)
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, required=True)
-    is_alumni = forms.BooleanField(required=False, initial=False, label="Are you an Alumni?")
-    is_student = forms.BooleanField(required=False, initial=True, label="Are you a Student?")
-    
+    user_type = forms.ChoiceField(
+        choices=[("student", "Student"), ("alumni", "Alumni")],
+        required=True,
+        label="Register as"
+    )
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'is_alumni', 'is_student')
+        fields = ('username', 'email', 'password1', 'password2', 'user_type')
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        user.is_student = self.cleaned_data["user_type"] == "student"
+        user.is_alumni = self.cleaned_data["user_type"] == "alumni"
+
+        if commit:
+            user.save()
+        
+        return user
+    
 class SignInForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
@@ -62,3 +76,4 @@ class PhotoForm(forms.ModelForm):
 #     class Meta:
 #         model = Event
 #         fields = ['title', 'description', 'date', 'location']
+

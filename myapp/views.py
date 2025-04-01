@@ -24,11 +24,12 @@ def signup_view(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('signin')  # Redirect to login after successful signup
+            return redirect('signin')  # Redirect to login page after signup
+        else:
+            print(form.errors)  # Debugging: Print form errors in terminal
     else:
-        form = SignUpForm()  # Ensure 'form' is always defined
-
-    return render(request, 'signup.html', {'form': form})
+        form = SignUpForm()
+    return render(request, "signup.html", {"form": form})
 
 def signin_view(request):
     if request.method == 'POST':

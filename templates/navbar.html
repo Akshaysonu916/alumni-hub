@@ -21,7 +21,6 @@
             <div id="menu" class="hidden md:flex md:items-center md:space-x-4 flex-col md:flex-row absolute md:static bg-gray-900 md:bg-transparent w-full md:w-auto top-16 left-0 md:top-auto md:left-auto py-4 md:py-0 z-50">
                 {% if user.is_authenticated %}
                     {% if user.is_alumni or user.is_admin %}
-                        <!-- Alumni and Admin User Links -->
                         <a href="{% url 'add_jobs' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                             Add Jobs
                         </a>
@@ -35,11 +34,13 @@
 
                     <!-- Profile Picture and Sign Out Button -->
                     <div class="flex items-center space-x-4">
-                        {% if user.profile.image %}
-                            <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg">
-                        {% else %}
-                            <img src="/static/images/default_profile.png" alt="Default Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg">
-                        {% endif %}
+                        {% comment %} <a href="{% url 'student_profile' %}"> {% endcomment %}
+                            {% if user.profile.image %}
+                                <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                            {% else %}
+                                <img src="/static/images/default_profile.png" alt="Default Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                            {% endif %}
+                        </a>
 
                         <form action="{% url 'signout' %}" method="post">
                             {% csrf_token %}
@@ -50,7 +51,6 @@
                     </div>
 
                 {% else %}
-                    <!-- Guest Links -->
                     <a href="{% url 'signin' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                         Sign In
                     </a>
