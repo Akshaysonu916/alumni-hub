@@ -14,17 +14,17 @@
                 <a href="{% url 'delete_photo' id=photo.id %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
                     Delete Photo
                 </a>
-            {% elif request.user.is_staff %}
-                <!-- Alumni: Only View Details -->
-                <p class="text-blue-600 font-semibold">You are viewing this photo as an Alumni.</p>
-            {% else %}
-                <!-- Regular Users: Edit and Delete -->
+            {% elif request.user == photo.user %}
+                <!-- Student (Photo Owner): Edit & Delete -->
                 <a href="{% url 'edit_photo' id=photo.id %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
                     Edit Photo
                 </a>
                 <a href="{% url 'delete_photo' id=photo.id %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
                     Delete Photo
                 </a>
+            {% else %}
+                <!-- Alumni: Only View Photo -->
+                <p class="text-green-600 font-semibold">You are viewing this photo as an Alumni.</p>
             {% endif %}
         {% endif %}
         <a href="{% url 'photo_gallery' %}" class="text-gray-600 hover:underline">Back to Gallery</a>

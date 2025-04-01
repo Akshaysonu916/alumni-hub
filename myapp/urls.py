@@ -14,7 +14,7 @@ urlpatterns = [
     path('upload/',upload_photo, name='upload_photo'),
     path('<int:job_id>/edit/', edit_jobpost, name='edit_jobpost'),
     path('<int:job_id>/delete/',delete_jobpost, name='delete_jobpost'),
-    path('photo/<int:id>/edit/',edit_photo, name='edit_photo'),
-    path('photo/<int:id>/delete/',delete_photo, name='delete_photo'),
-    path('photo/<int:id>/',photo_detail, name='photo_detail'), 
+    path('photo/<int:id>/',photo_detail, name='photo_detail'),
+    path('photo/<int:id>/edit/', edit_photo, name='edit_photo'),
+    path('photo/<int:id>/delete/', delete_photo, name='delete_photo'), 
 ]

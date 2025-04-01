@@ -41,7 +41,6 @@ class JobPost(models.Model):
         choices=[("FT", "Full-Time"), ("PT", "Part-Time"),("IS", "Intern-Ship"),("RT", "Remote-Job")],
         default=4  # Added default value
     )
-    application_link = models.URLField(blank=True, null=True)  # Allowing blank values
     company_website = models.URLField(blank=True, null=True)  # New field for company site link
 
     def __str__(self):

@@ -100,14 +100,17 @@ def photo_gallery(request):
 # View to handle photo uploads
 def upload_photo(request):
     if request.method == 'POST':
-        form = PhotoForm(request.POST, request.FILES)  # Include request.FILES for file uploads
+        form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()  # Save the uploaded photo to the database
-            return redirect('photo_gallery')  # Redirect to the gallery page after upload
+            photo = form.save(commit=False)  # Don't save to DB yet
+            photo.user = request.user         # Assign logged-in user
+            photo.save()                      # Now save to DB
+            messages.success(request, "Photo uploaded successfully!")
+            return redirect('photo_gallery')
     else:
-        form = PhotoForm()  # Render an empty form for GET requests
+        form = PhotoForm()
+    
     return render(request, 'upload_photo.html', {'form': form})
-
 
 
 
@@ -115,13 +118,15 @@ def photo_detail(request, id):
     photo = get_object_or_404(Photo, id=id)
     return render(request, 'photo_detail.html', {'photo': photo})
 
-
+# Edit Photo View
+@login_required
 def edit_photo(request, id):
     photo = get_object_or_404(Photo, id=id)
     
+    # Check authorization
     if request.user != photo.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to edit this photo.")
-        return redirect('photo_gallery')
+        return redirect('photo_detail', id=photo.id)
 
     if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES, instance=photo)
@@ -135,12 +140,14 @@ def edit_photo(request, id):
     return render(request, 'edit_photo.html', {'form': form, 'photo': photo})
 
 
+@login_required
 def delete_photo(request, id):
     photo = get_object_or_404(Photo, id=id)
-    
+
+    # Check authorization
     if request.user != photo.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to delete this photo.")
-        return redirect('photo_gallery')
+        return redirect('photo_detail', id=photo.id)
 
     if request.method == 'POST':
         photo.delete()

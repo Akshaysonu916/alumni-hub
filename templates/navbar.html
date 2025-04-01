@@ -33,13 +33,21 @@
                         Gallery
                     </a>
 
-                    <!-- Sign Out button (always last) -->
-                    <form action="{% url 'signout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Sign Out
-                        </button>
-                    </form>
+                    <!-- Profile Picture and Sign Out Button -->
+                    <div class="flex items-center space-x-4">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg">
+                        {% else %}
+                            <img src="/static/images/default_profile.png" alt="Default Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg">
+                        {% endif %}
+
+                        <form action="{% url 'signout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                                Sign Out
+                            </button>
+                        </form>
+                    </div>
 
                 {% else %}
                     <!-- Guest Links -->

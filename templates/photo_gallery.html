@@ -15,15 +15,18 @@
                 <p class="text-sm text-gray-600">{{ photo.description }}</p>
                 <p class="text-xs text-gray-500 mt-2">Uploaded on {{ photo.upload_date|date:"F j, Y" }}</p>
 
-                <!-- Buttons Section -->
+                <!-- Role-Based Buttons -->
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
-                        <!-- Superuser can only delete photos -->
+                        <!-- Superuser: Can delete any photo -->
                         <a href="{% url 'delete_photo' photo.id %}" class="text-red-600 hover:text-red-700">Delete</a>
-                    {% elif photo.user == user %}
-                        <!-- Users can edit, delete, or view photos they uploaded -->
+                    {% elif user.id == photo.user.id and user.is_student %}
+                        <!-- Students: Can edit & delete their own photos -->
                         <a href="{% url 'edit_photo' photo.id %}" class="text-blue-600 hover:text-blue-700">Edit</a>
                         <a href="{% url 'delete_photo' photo.id %}" class="text-red-600 hover:text-red-700 ml-4">Delete</a>
+                    {% elif user.is_alumni %}
+                        <!-- Alumni: Can only view the photo -->
+                        <a href="{% url 'photo_detail' photo.id %}" class="text-green-600 hover:text-green-700">View Photo</a>
                     {% endif %}
                 {% endif %}
             </div>
@@ -31,8 +34,8 @@
         {% endfor %}
     </div>
 
-    <!-- Upload Photo Button for Users -->
-    {% if user.is_authenticated and not user.is_superuser %}
+    <!-- Upload Photo Button (Only for Students) -->
+    {% if user.is_authenticated and user.is_student %}
     <div class="mt-6">
         <a href="{% url 'upload_photo' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Upload a Photo

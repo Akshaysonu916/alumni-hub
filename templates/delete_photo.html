@@ -1,12 +1,22 @@
-{% extends 'home.html' %}
+{% extends "home.html" %}
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold text-red-600 mb-4">Delete Photo</h1>
-    <p>Are you sure you want to delete "{{ photo.title }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Yes, Delete</button>
-        <a href="{% url 'photo_detail' id=photo.id %}" class="ml-4 text-gray-600 hover:underline">Cancel</a>
-    </form>
+<div class="container mx-auto max-w-lg px-4 py-12">
+    <h1 class="text-xl font-medium text-gray-800 mb-6">Delete Photo</h1>
+    
+    <div class="mb-8">
+        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full aspect-video object-cover rounded">
+        <p class="text-gray-600 text-sm mt-3">{{ photo.description }}</p>
+        <p class="text-gray-400 text-xs mt-1">Uploaded on {{ photo.upload_date|date:"F j, Y" }}</p>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+        <form method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">
+                Delete
+            </button>
+        </form>
+        <a href="{% url 'photo_detail' id=photo.id %}" class="text-gray-500 hover:text-gray-700 transition">Cancel</a>
+    </div>
 </div>
 {% endblock %}

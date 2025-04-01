@@ -1,12 +1,13 @@
-{% extends 'home.html' %}
+{% extends "home.html" %}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold text-gray-900 mb-4">Edit Photo</h1>
-    <form method="post" enctype="multipart/form-data">
+    <h1 class="text-2xl font-bold text-gray-900">Edit Photo</h1>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-lg">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Save Changes</button>
-        <a href="{% url 'photo_detail' id=photo.id %}" class="ml-4 text-gray-600 hover:underline">Cancel</a>
+        <a href="{% url 'photo_detail' id=photo.id %}" class="text-gray-600 ml-4 hover:underline">Cancel</a>
     </form>
 </div>
 {% endblock %}
