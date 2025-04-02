@@ -1,108 +1,163 @@
 {% extends "home.html" %}
 {% block content %}
 {% include "navbar.html" %}
-
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-  <div class="flex items-center justify-center w-full min-h-screen">
-    <div class="w-full max-w-md p-8 bg-white shadow-xl rounded-2xl">
-      <h2 class="text-3xl font-extrabold text-center text-gray-800">Create an Account</h2>
-      <p class="text-center text-gray-500 mt-2">Join the Alumni-Student Portal today!</p>
-
-      <form method="POST" class="mt-6 space-y-4">
-        {% csrf_token %}
-
-        <!-- Username -->
-        <div class="relative">
-          <input 
-            type="text" 
-            name="username" 
-            placeholder="Username" 
-            required 
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-          >
-          <span class="absolute right-4 top-3 text-gray-400">
-            <i class="fas fa-user"></i>
-          </span>
-          <p class="text-red-500 text-sm">{{ form.username.errors }}</p>
+<section class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div class="bg-white shadow-md rounded-lg p-6 md:p-8 w-full max-w-md border border-gray-200">
+        <div class="flex flex-col items-center">
+            <a href="#" class="flex items-center space-x-3">
+                <img class="w-12 h-12 rounded-full shadow-sm border border-gray-300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" alt="logo">
+                <span class="text-2xl font-medium text-gray-800">Alumni Hub</span>
+            </a>
+            <h1 class="text-xl font-medium text-gray-800 mt-6">Create Account</h1>
+            <p class="text-gray-500 mt-2 text-sm">Join the Alumni-Student Portal today</p>
+            <div class="w-16 h-0.5 bg-gray-300 mt-4"></div>
         </div>
 
-        <!-- Email -->
-        <div class="relative">
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Email" 
-            required 
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-          >
-          <span class="absolute right-4 top-3 text-gray-400">
-            <i class="fas fa-envelope"></i>
-          </span>
-          <p class="text-red-500 text-sm">{{ form.email.errors }}</p>
+        <form method="POST" class="mt-8 space-y-5">
+            {% csrf_token %}
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <i class="fas fa-user text-sm"></i>
+                    </span>
+                    <input type="text" 
+                        id="username"
+                        name="username" 
+                        placeholder="Choose a username" 
+                        required 
+                        class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                </div>
+                <p class="text-red-500 text-xs mt-1">{{ form.username.errors }}</p>
+            </div>
+            
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <i class="fas fa-envelope text-sm"></i>
+                    </span>
+                    <input type="email" 
+                        id="email"
+                        name="email" 
+                        placeholder="Your email address" 
+                        required 
+                        class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                </div>
+                <p class="text-red-500 text-xs mt-1">{{ form.email.errors }}</p>
+            </div>
+            
+            <!-- Password -->
+            <div>
+                <label for="password1" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <i class="fas fa-lock text-sm"></i>
+                    </span>
+                    <input type="password" 
+                        id="password1"
+                        name="password1" 
+                        placeholder="Create a password" 
+                        required 
+                        class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                    <span id="togglePassword1" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                        <i id="eyeIcon1" class="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
+                    </span>
+                </div>
+                <p class="text-red-500 text-xs mt-1">{{ form.password1.errors }}</p>
+            </div>
+            
+            <!-- Confirm Password -->
+            <div>
+                <label for="password2" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <i class="fas fa-lock text-sm"></i>
+                    </span>
+                    <input type="password" 
+                        id="password2"
+                        name="password2" 
+                        placeholder="Confirm your password" 
+                        required 
+                        class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                    <span id="togglePassword2" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                        <i id="eyeIcon2" class="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
+                    </span>
+                </div>
+                <p class="text-red-500 text-xs mt-1">{{ form.password2.errors }}</p>
+            </div>
+            
+            <!-- Role Selection - Dropdown -->
+            <div>
+                <label for="user_type" class="block text-sm font-medium text-gray-700 mb-1">I am registering as</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
+                        <i class="fas fa-user-tag text-sm"></i>
+                    </span>
+                    <select 
+                        id="user_type"
+                        name="user_type" 
+                        class="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm appearance-none bg-white"
+                    >
+                        <option value="student" selected>Student</option>
+                        <option value="alumni">Alumni</option>
+                    </select>
+                    <span class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500">
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </span>
+                </div>
+                <p class="text-red-500 text-xs mt-1">{{ form.user_type.errors }}</p>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-2">
+                Sign Up
+            </button>
+        </form>
+
+        <div class="flex items-center my-6">
+            <div class="flex-grow h-px bg-gray-200"></div>
+            <span class="px-3 text-sm text-gray-500">or continue with</span>
+            <div class="flex-grow h-px bg-gray-200"></div>
         </div>
-
-        <!-- Password -->
-        <div class="relative">
-          <input 
-            type="password" 
-            name="password1" 
-            placeholder="Password" 
-            required 
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-          >
-          <span class="absolute right-4 top-3 text-gray-400">
-            <i class="fas fa-lock"></i>
-          </span>
-          <p class="text-red-500 text-sm">{{ form.password1.errors }}</p>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="relative">
-          <input 
-            type="password" 
-            name="password2" 
-            placeholder="Confirm Password" 
-            required 
-            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none shadow-sm"
-          >
-          <span class="absolute right-4 top-3 text-gray-400">
-            <i class="fas fa-lock"></i>
-          </span>
-          <p class="text-red-500 text-sm">{{ form.password2.errors }}</p>
-        </div>
-
-        <!-- Role Selection (Radio Buttons for Single Selection) -->
-        <div class="flex items-center justify-between mt-2">
-          <label class="flex items-center">
-            <input type="radio" name="user_type" value="alumni" class="mr-2 rounded">
-            <span class="text-gray-700">I am an Alumni</span>
-          </label>
-          <label class="flex items-center">
-            <input type="radio" name="user_type" value="student" class="mr-2 rounded" checked>
-            <span class="text-gray-700">I am a Student</span>
-          </label>
-        </div>
-        <p class="text-red-500 text-sm">{{ form.user_type.errors }}</p>
-
-        <!-- Submit Button -->
-        <button 
-          type="submit" 
-          class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition duration-300 shadow-md"
-        >
-          Sign Up
-        </button>
-      </form>
-
-      <!-- Login Link -->
-      <p class="mt-4 text-center text-gray-600">
-        Already have an account? 
-        <a href="{% url 'signin' %}" class="text-blue-500 hover:underline font-semibold">Log in</a>
-      </p>
+        <p class="text-sm text-gray-600 text-center">
+            Already have an account? 
+            <a href="{% url 'signin' %}" class="text-blue-600 font-medium hover:text-blue-800">Sign in</a>
+        </p>
     </div>
-  </div>
+</section>
 
-  <!-- FontAwesome for Icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>
-
+<!-- FontAwesome & Script for Password Toggle -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+    // Password toggle functionality for first password field
+    document.getElementById("togglePassword1").addEventListener("click", function() {
+        let passwordField = document.getElementById("password1");
+        let eyeIcon = document.getElementById("eyeIcon1");
+        
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+        } else {
+            passwordField.type = "password";
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+        }
+    });
+    
+    // Password toggle functionality for confirm password field
+    document.getElementById("togglePassword2").addEventListener("click", function() {
+        let passwordField = document.getElementById("password2");
+        let eyeIcon = document.getElementById("eyeIcon2");
+        
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+        } else {
+            passwordField.type = "password";
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+        }
+    });
+</script>
 {% endblock content %}
