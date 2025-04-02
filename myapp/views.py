@@ -156,3 +156,85 @@ def delete_photo(request, id):
         return redirect('photo_gallery')
 
     return render(request, 'delete_photo.html', {'photo': photo})
+
+
+@login_required
+def profile_view(request):
+    """Display the profile of the logged-in user based on their role."""
+    try:
+        if hasattr(request.user, 'alumni_profile'):
+            profile = request.user.alumni_profile
+            template = "alumni_profile.html"
+        elif hasattr(request.user, 'student_profile'):
+            profile = request.user.student_profile
+            template = "student_profile.html"
+        else:
+            return redirect("edit_profile")  # Redirect to profile edit if no profile exists
+
+        return render(request, template, {"profile": profile})
+
+    except Exception as e:
+        print(f"Error loading profile: {e}")
+        return redirect("edit_profile")  # Handle missing profiles gracefully
+
+
+@login_required
+def edit_profile_view(request):
+    """Allow the user to edit their profile based on their role."""
+    if hasattr(request.user, 'alumni_profile'):
+        profile = request.user.alumni_profile
+        form_class = AlumniProfileForm
+    elif hasattr(request.user, 'student_profile'):
+        profile = request.user.student_profile
+        form_class = StudentProfileForm
+    else:
+        return redirect("create_profile")  # If no profile, redirect to create profile
+
+    if request.method == "POST":
+        form = form_class(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")
+    else:
+        form = form_class(instance=profile)
+
+    return render(request, "edit_profile.html", {"form": form})
+
+
+@login_required
+def create_profile_view(request):
+    if request.method == "POST":
+        user_type = request.POST.get("user_type")
+        
+        if user_type == "alumni":
+            company = request.POST.get("company", "")
+            job_title = request.POST.get("job_title", "")
+            graduation_year = request.POST.get("graduation_year", 2025)
+            linkedin = request.POST.get("linkedin", "")
+            
+            AlumniProfile.objects.create(
+                user=request.user,
+                company=company,
+                job_title=job_title,
+                graduation_year=graduation_year,
+                linkedin=linkedin
+            )
+        
+        elif user_type == "student":
+            enrollment_year = request.POST.get("enrollment_year")
+            major = request.POST.get("major", "")
+            
+            # Ensure enrollment_year is provided before creating the profile
+            if not enrollment_year:
+                messages.error(request, "Enrollment year is required for students.")
+                return render(request, "create_profile.html")
+            
+            StudentProfile.objects.create(
+                user=request.user,
+                enrollment_year=enrollment_year,
+                major=major
+            )
+
+        return redirect("profile")  # Redirect to profile page after creation
+
+    return render(request, "create_profile.html")

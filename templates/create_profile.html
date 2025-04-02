@@ -1,0 +1,62 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Edit Your Profile</h2>
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            
+            <!-- User Type Selection -->
+            <label class="block font-semibold">Select Your Role:</label>
+            <select name="user_type" id="user_type" class="border rounded-md px-4 py-2 w-full" onchange="toggleFields()">
+                <option value="">-- Select --</option>
+                <option value="student" {% if profile.studentprofile %}selected{% endif %}>Student</option>
+                <option value="alumni" {% if profile.alumniprofile %}selected{% endif %}>Alumni</option>
+            </select>
+
+            <!-- Alumni Fields -->
+            <div id="alumni_fields" class="{% if not profile.alumniprofile %}hidden{% endif %}">
+                <label>Company:</label>
+                <input type="text" name="company" value="{{ profile.alumniprofile.company|default:'' }}" class="border rounded-md px-4 py-2 w-full">
+
+                <label>Job Title:</label>
+                <input type="text" name="job_title" value="{{ profile.alumniprofile.job_title|default:'' }}" class="border rounded-md px-4 py-2 w-full">
+
+                <label>Graduation Year:</label>
+                <input type="number" name="graduation_year" value="{{ profile.alumniprofile.graduation_year|default:'2025' }}" class="border rounded-md px-4 py-2 w-full">
+
+                <label>LinkedIn Profile:</label>
+                <input type="url" name="linkedin" value="{{ profile.alumniprofile.linkedin|default:'' }}" class="border rounded-md px-4 py-2 w-full">
+            </div>
+
+            <!-- Student Fields -->
+            <div id="student_fields" class="{% if not profile.studentprofile %}hidden{% endif %}">
+                <label>Enrollment Year:</label>
+                <input type="number" name="enrollment_year" value="{{ profile.studentprofile.enrollment_year|default:'' }}" class="border rounded-md px-4 py-2 w-full">
+
+                <label>Major:</label>
+                <input type="text" name="major" value="{{ profile.studentprofile.major|default:'' }}" class="border rounded-md px-4 py-2 w-full">
+            </div>
+
+            <!-- Profile Picture Upload -->
+            <label>Profile Picture:</label>
+            <input type="file" name="profile_picture" class="border rounded-md px-4 py-2 w-full">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full border-2 border-blue-500 shadow-lg mt-2">
+            {% endif %}
+
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md w-full">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript to Show/Hide Fields Based on Selection -->
+<script>
+    function toggleFields() {
+        let userType = document.getElementById("user_type").value;
+        document.getElementById("alumni_fields").classList.toggle("hidden", userType !== "alumni");
+        document.getElementById("student_fields").classList.toggle("hidden", userType !== "student");
+    }
+</script>
+{% endblock %}

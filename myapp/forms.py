@@ -31,18 +31,18 @@ class SignInForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
 
-class AlumniProfileForm(forms.ModelForm):
-    class Meta:
-        model = AlumniProfile
-        fields = ['company', 'job_title', 'graduation_year', 'linkedin']
-        widgets = {
-            'company': forms.TextInput(attrs={'class': 'border border-black'}),
-            'job_title': forms.TextInput(attrs={'class': 'border border-black'}),
-            'graduation_year': forms.NumberInput(attrs={'class': 'border border-black'}),
-            'linkedin': forms.URLInput(attrs={'class': 'border border-black'}),
-        }
+# class AlumniProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = AlumniProfile
+#         fields = ['company', 'job_title', 'graduation_year', 'linkedin']
+#         widgets = {
+#             'company': forms.TextInput(attrs={'class': 'border border-black'}),
+#             'job_title': forms.TextInput(attrs={'class': 'border border-black'}),
+#             'graduation_year': forms.NumberInput(attrs={'class': 'border border-black'}),
+#             'linkedin': forms.URLInput(attrs={'class': 'border border-black'}),
+#         }
 
-# 3. Student Profile Update Form
+# # 3. Student Profile Update Form
 # class StudentProfileForm(forms.ModelForm):
 #     class Meta:
 #         model = StudentProfile
@@ -76,4 +76,12 @@ class PhotoForm(forms.ModelForm):
 #     class Meta:
 #         model = Event
 #         fields = ['title', 'description', 'date', 'location']
+class AlumniProfileForm(forms.ModelForm):
+    class Meta:
+        model = AlumniProfile
+        fields = ["company", "job_title", "graduation_year", "linkedin","profile_picture"]
 
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = StudentProfile
+        fields = ["enrollment_year", "major", "resume",'profile_picture']

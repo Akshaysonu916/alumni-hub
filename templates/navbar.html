@@ -1,7 +1,6 @@
 <body class="bg-gray-100">
     <nav class="bg-gradient-to-r from-blue-900 to-gray-900 shadow-lg">
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
-            
             <!-- Logo -->
             <a href="{% url 'home' %}" class="flex items-center space-x-3 text-white text-2xl font-semibold hover:opacity-80 transition">
                 <img class="w-12 h-12 rounded-full shadow-lg border-2 border-white" 
@@ -32,24 +31,37 @@
                         Gallery
                     </a>
 
-                    <!-- Profile Picture and Sign Out Button -->
-                    <div class="flex items-center space-x-4">
-                        {% comment %} <a href="{% url 'student_profile' %}"> {% endcomment %}
-                            {% if user.profile.image %}
-                                <img src="{{ user.profile.image.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
+                            {% if user.alumni_profile.profile_picture %}
+                                <img src="{{ user.alumni_profile.profile_picture.url }}" 
+                                     alt="Profile Picture" 
+                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                            {% elif user.student_profile.profile_picture %}
+                                <img src="{{ user.student_profile.profile_picture.url }}" 
+                                     alt="Profile Picture" 
+                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
                             {% else %}
-                                <img src="/static/images/default_profile.png" alt="Default Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                                <img src="/static/images/default_profile.png" 
+                                     alt="Default Profile Picture" 
+                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
                             {% endif %}
-                        </a>
+                        </button>
 
-                        <form action="{% url 'signout' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                                Sign Out
-                            </button>
-                        </form>
+                        <!-- Dropdown Content -->
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
+                            <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">
+                                Profile
+                            </a>
+                            <form action="{% url 'signout' %}" method="post" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">
+                                    Sign Out
+                                </button>
+                            </form>
+                        </div>
                     </div>
-
                 {% else %}
                     <a href="{% url 'signin' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                         Sign In
@@ -62,11 +74,14 @@
         </div>
     </nav>
 
-    <!-- JavaScript for Mobile Menu -->
+    <!-- JavaScript for Mobile and Profile Menu -->
     <script>
         document.getElementById('menu-btn').addEventListener('click', function () {
-            let menu = document.getElementById('menu');
-            menu.classList.toggle('hidden');
+            document.getElementById('menu').classList.toggle('hidden');
+        });
+
+        document.getElementById('profile-btn').addEventListener('click', function () {
+            document.getElementById('profile-menu').classList.toggle('hidden');
         });
     </script>
 </body>

@@ -18,6 +18,7 @@ class AlumniProfile(models.Model):
     job_title = models.CharField(max_length=255, blank=True, null=True)
     graduation_year = models.PositiveIntegerField(default=2025)
     linkedin = models.URLField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.job_title} at {self.company}"
@@ -28,7 +29,7 @@ class StudentProfile(models.Model):
     enrollment_year = models.PositiveIntegerField()
     major = models.CharField(max_length=255)
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
-
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     def __str__(self):
         return f"{self.user.username} - {self.major}"
 

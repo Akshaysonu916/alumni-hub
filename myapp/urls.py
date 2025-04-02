@@ -16,5 +16,8 @@ urlpatterns = [
     path('<int:job_id>/delete/',delete_jobpost, name='delete_jobpost'),
     path('photo/<int:id>/',photo_detail, name='photo_detail'),
     path('photo/<int:id>/edit/', edit_photo, name='edit_photo'),
-    path('photo/<int:id>/delete/', delete_photo, name='delete_photo'), 
+    path('photo/<int:id>/delete/', delete_photo, name='delete_photo'),
+    path('profile/', profile_view, name='profile'),  
+    path("profile/edit/", edit_profile_view, name="edit_profile"),
+    path("profile/create/", create_profile_view, name="create_profile"),
 ]
