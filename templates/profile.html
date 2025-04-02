@@ -1,10 +1,10 @@
 {% extends "home.html" %}
-
 {% block content %}
 <div class="container mx-auto p-6">
     <div class="bg-white shadow-lg rounded-lg p-6">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Student Profile</h2>
         <div class="flex items-center space-x-6">
+            <!-- Display Profile Picture -->
             {% if profile.profile_picture %}
                 <img class="w-24 h-24 rounded-full border-2 border-blue-500 shadow-lg" 
                      src="{{ profile.profile_picture.url }}" 
@@ -14,6 +14,7 @@
                      src="/static/images/default_profile.png" 
                      alt="Default Profile Picture">
             {% endif %}
+
             <div>
                 <p class="text-lg font-semibold">{{ profile.user.username }}</p>
                 <p class="text-gray-600">Major: {{ profile.major }}</p>
@@ -23,6 +24,7 @@
                 {% endif %}
             </div>
         </div>
+
         <div class="mt-4">
             <a href="{% url 'edit_profile' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md">Edit Profile</a>
             <a href="{% url 'signout' %}" class="bg-red-600 text-white px-4 py-2 rounded-md">Sign Out</a>
