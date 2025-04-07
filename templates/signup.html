@@ -1,6 +1,7 @@
 {% extends "home.html" %}
 {% block content %}
 {% include "navbar.html" %}
+
 <section class="min-h-screen flex items-center justify-center bg-gray-900 p-4">
     <div class="bg-gray-800 shadow-md rounded-lg p-6 md:p-8 w-full max-w-md border border-gray-700">
         <div class="flex flex-col items-center">
@@ -20,21 +21,25 @@
                 <input type="text" id="username" name="username" placeholder="Choose a username" required 
                     class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
+
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
                 <input type="email" id="email" name="email" placeholder="Your email address" required 
                     class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
+
             <div>
                 <label for="password1" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
                 <input type="password" id="password1" name="password1" placeholder="Create a password" required 
                     class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
+
             <div>
                 <label for="password2" class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
                 <input type="password" id="password2" name="password2" placeholder="Confirm your password" required 
                     class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
             </div>
+
             <div>
                 <label for="user_type" class="block text-sm font-medium text-gray-300 mb-1">I am registering as</label>
                 <select id="user_type" name="user_type" class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
@@ -42,14 +47,51 @@
                     <option value="alumni">Alumni</option>
                 </select>
             </div>
+
+            <!-- Alumni Fields -->
+            <div id="alumniFields" class="space-y-4 hidden">
+                <div>
+                    <label for="department" class="block text-sm font-medium text-gray-300 mb-1">Department</label>
+                    <input type="text" id="department" name="department" placeholder="e.g., Computer Science" 
+                        class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label for="passout_year" class="block text-sm font-medium text-gray-300 mb-1">Passout Year</label>
+                    <input type="number" id="passout_year" name="passout_year" placeholder="e.g., 2023"
+                        class="w-full p-3 border border-gray-600 bg-gray-700 text-gray-200 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
             <button type="submit" class="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-md shadow-sm hover:bg-blue-700">
                 Sign Up
             </button>
         </form>
+
         <p class="text-sm text-gray-400 text-center mt-6">
             Already have an account? 
             <a href="{% url 'signin' %}" class="text-blue-400 hover:text-blue-500">Sign in</a>
         </p>
     </div>
 </section>
+
+<!-- JS to toggle alumni fields -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userType = document.getElementById("user_type");
+        const alumniFields = document.getElementById("alumniFields");
+
+        function toggleAlumniFields() {
+            if (userType.value === "alumni") {
+                alumniFields.classList.remove("hidden");
+            } else {
+                alumniFields.classList.add("hidden");
+            }
+        }
+
+        userType.addEventListener("change", toggleAlumniFields);
+        toggleAlumniFields(); // Initial check
+    });
+</script>
+
 {% endblock content %}

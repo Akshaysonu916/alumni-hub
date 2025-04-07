@@ -19,6 +19,9 @@ class AlumniProfile(models.Model):
     graduation_year = models.PositiveIntegerField(default=2025)
     linkedin = models.URLField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    department = models.CharField(max_length=100)  # <- Make sure this exists
+    passout_year = models.IntegerField()           # <- And this too
+
 
     def __str__(self):
         return f"{self.user.username} - {self.job_title} at {self.company}"

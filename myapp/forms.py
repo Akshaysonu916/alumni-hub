@@ -11,10 +11,12 @@ class SignUpForm(UserCreationForm):
         required=True,
         label="Register as"
     )
+    department = forms.CharField(required=False)
+    passout_year = forms.IntegerField(required=False, label="Passout Year")
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'user_type')
+        fields = ('username', 'email', 'password1', 'password2', 'user_type', 'department', 'passout_year')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -24,7 +26,15 @@ class SignUpForm(UserCreationForm):
 
         if commit:
             user.save()
-        
+
+            if user.is_alumni:
+                # Save to related UserProfile or AlumniProfile
+                AlumniProfile.objects.create(
+                    user=user,
+                    department=self.cleaned_data.get("department"),
+                    passout_year=self.cleaned_data.get("passout_year")
+                )
+
         return user
     
 class SignInForm(forms.Form):
