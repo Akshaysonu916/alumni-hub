@@ -14,11 +14,13 @@ def add_job(request):
     if request.method == 'POST':
         form = JobPostForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('jobpost_list')  # Redirect to the job post list page
+            job = form.save(commit=False)
+            job.posted_by = request.user
+            job.save()
+            return redirect('jobpost_list')  # Change this to your actual job listing view name
     else:
         form = JobPostForm()
-    return render(request, 'addjobs.html', {'form': form})
+    return render(request, 'add_job.html', {'form': form})
 
 
 def signup_view(request):

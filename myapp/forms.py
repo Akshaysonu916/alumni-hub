@@ -62,7 +62,7 @@ class SignInForm(forms.Form):
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        fields = ['job_name', 'company', 'description', 'job_type','company_website']
+        fields = ['job_name', 'company', 'description', 'job_type', 'company_website']  # No 'posted_by'
         widgets = {
             'job_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Job Title'}),
             'company': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name'}),
@@ -71,6 +71,7 @@ class JobPostForm(forms.ModelForm):
             'company_website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Company Website Link'}),
         }
 
+        
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo

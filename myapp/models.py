@@ -46,6 +46,7 @@ class JobPost(models.Model):
         default=4  # Added default value
     )
     company_website = models.URLField(blank=True, null=True)  # New field for company site link
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')
 
     def __str__(self):
         return self.job_name
