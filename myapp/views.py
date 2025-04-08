@@ -4,6 +4,8 @@ from .models import *
 from django.contrib.auth.decorators import login_required ,user_passes_test
 from django.contrib import messages
 from django.contrib.auth import logout,login,authenticate
+from django.http import HttpResponseForbidden
+from django.db.models import Q
 
 # Create your views here.
 
@@ -59,7 +61,15 @@ def logout_view(request):
 #job posts all operations
 @login_required(login_url='signin')
 def jobpost_list(request):
-    jobs = JobPost.objects.all()  # Fetch all job posts
+    query = request.GET.get("q")  # Get the search query from URL if it exists
+
+    if query:
+        jobs = JobPost.objects.filter(
+            Q(job_name__icontains=query) 
+        )
+    else:
+        jobs = JobPost.objects.all()  # No search, return all jobs
+
     return render(request, 'jobpost_list.html', {'jobs': jobs})
 
 def userjobs_view(request):
@@ -71,8 +81,14 @@ def job_post_detail(request, job_id):
     return render(request, 'jobpost_detail.html', {'job': job})
 
 
+@login_required
 def edit_jobpost(request, job_id):
     jobpost = get_object_or_404(JobPost, id=job_id)
+
+    # ✅ Permission check
+    if request.user != jobpost.posted_by and not request.user.is_superuser:
+        return HttpResponseForbidden("You are not allowed to edit this job post.")
+
     if request.method == 'POST':
         form = JobPostForm(request.POST, instance=jobpost)
         if form.is_valid():
@@ -81,7 +97,9 @@ def edit_jobpost(request, job_id):
             return redirect('jobpost_detail', job_id=jobpost.id)
     else:
         form = JobPostForm(instance=jobpost)
+
     return render(request, 'edit_jobpost.html', {'form': form, 'jobpost': jobpost})
+
 
 def delete_jobpost(request, job_id):
     jobpost = get_object_or_404(JobPost, id=job_id)
@@ -180,15 +198,23 @@ def profile_view(request):
 
 @login_required
 def edit_profile_view(request):
-    """Allow the user to edit their profile based on their role."""
-    if hasattr(request.user, 'alumni_profile'):
-        profile = request.user.alumni_profile
+    user = request.user
+
+    if hasattr(user, 'is_alumni') and user.is_alumni:
+        profile, created = AlumniProfile.objects.get_or_create(user=user)
         form_class = AlumniProfileForm
-    elif hasattr(request.user, 'student_profile'):
-        profile = request.user.student_profile
+    elif hasattr(user, 'is_student') and user.is_student:
+        # Provide defaults for required fields
+        profile, created = StudentProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'enrollment_year': 2020,  # 👈 You can customize this
+                # 'graduation_year': 2024,  # 👈 Or calculate from current year
+            }
+        )
         form_class = StudentProfileForm
     else:
-        return redirect("create_profile")  # If no profile, redirect to create profile
+        return HttpResponseForbidden("Invalid user type or missing profile.")
 
     if request.method == "POST":
         form = form_class(request.POST, request.FILES, instance=profile)
@@ -200,44 +226,43 @@ def edit_profile_view(request):
 
     return render(request, "edit_profile.html", {"form": form})
 
-
-@login_required
-def create_profile_view(request):
-    if request.method == "POST":
-        user_type = request.POST.get("user_type")
+# @login_required
+# def create_profile_view(request):
+#     if request.method == "POST":
+#         user_type = request.POST.get("user_type")
         
-        if user_type == "alumni":
-            company = request.POST.get("company", "")
-            job_title = request.POST.get("job_title", "")
-            graduation_year = request.POST.get("graduation_year", 2025)
-            linkedin = request.POST.get("linkedin", "")
+#         if user_type == "alumni":
+#             company = request.POST.get("company", "")
+#             job_title = request.POST.get("job_title", "")
+#             graduation_year = request.POST.get("graduation_year", 2025)
+#             linkedin = request.POST.get("linkedin", "")
             
-            AlumniProfile.objects.create(
-                user=request.user,
-                company=company,
-                job_title=job_title,
-                graduation_year=graduation_year,
-                linkedin=linkedin
-            )
+#             AlumniProfile.objects.create(
+#                 user=request.user,
+#                 company=company,
+#                 job_title=job_title,
+#                 graduation_year=graduation_year,
+#                 linkedin=linkedin
+#             )
         
-        elif user_type == "student":
-            enrollment_year = request.POST.get("enrollment_year")
-            major = request.POST.get("major", "")
+#         elif user_type == "student":
+#             enrollment_year = request.POST.get("enrollment_year")
+#             major = request.POST.get("major", "")
             
-            # Ensure enrollment_year is provided before creating the profile
-            if not enrollment_year:
-                messages.error(request, "Enrollment year is required for students.")
-                return render(request, "create_profile.html")
+#             # Ensure enrollment_year is provided before creating the profile
+#             if not enrollment_year:
+#                 messages.error(request, "Enrollment year is required for students.")
+#                 return render(request, "create_profile.html")
             
-            StudentProfile.objects.create(
-                user=request.user,
-                enrollment_year=enrollment_year,
-                major=major
-            )
+#             StudentProfile.objects.create(
+#                 user=request.user,
+#                 enrollment_year=enrollment_year,
+#                 major=major
+#             )
 
-        return redirect("profile")  # Redirect to profile page after creation
+#         return redirect("profile")  # Redirect to profile page after creation
 
-    return render(request, "create_profile.html")
+#     return render(request, "create_profile.html")
 
 
 
