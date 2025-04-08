@@ -20,4 +20,9 @@ urlpatterns = [
     path('profile/', profile_view, name='profile'),  
     path("profile/edit/", edit_profile_view, name="edit_profile"),
     path("profile/create/", create_profile_view, name="create_profile"),
+    path('admin-dashboard/',admin_dashboard, name='admin_dashboard'),
+    path('alumni/', admin_alumni_list, name='admin_alumni_list'),
+    path('students/', admin_student_list, name='admin_student_list'),
+    path('jobs/', admin_job_list, name='admin_job_list'),
+    path('gallery/', admin_gallery_list, name='admin_gallery_list'),
 ]

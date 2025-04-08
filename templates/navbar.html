@@ -19,50 +19,75 @@
             <!-- Navigation Links -->
             <div id="menu" class="hidden md:flex md:items-center md:space-x-4 flex-col md:flex-row absolute md:static bg-gray-900 md:bg-transparent w-full md:w-auto top-16 left-0 md:top-auto md:left-auto py-4 md:py-0 z-50">
                 {% if user.is_authenticated %}
-                    {% if user.is_alumni or user.is_admin %}
+                    {% if user.is_superuser %}
+                        <!-- Admin sees only Admin Dashboard and Sign Out -->
+                        <a href="{% url 'admin_dashboard' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            Admin Dashboard
+                        </a>
+                        <form action="{% url 'signout' %}" method="post" class="ml-4">
+                            {% csrf_token %}
+                            <button type="submit" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                                Sign Out
+                            </button>
+                        </form>
+                    {% elif user.is_alumni %}
+                        <!-- Alumni sees Add Jobs, Jobs, and Gallery -->
                         <a href="{% url 'add_jobs' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                             Add Jobs
                         </a>
-                    {% endif %}
-                    <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        Jobs
-                    </a>
-                    <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        Gallery
-                    </a>
+                        <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            Jobs
+                        </a>
+                        <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            Gallery
+                        </a>
 
-                    <!-- Profile Dropdown -->
-                    <div class="relative">
-                        <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
-                            {% if user.alumni_profile.profile_picture %}
-                                <img src="{{ user.alumni_profile.profile_picture.url }}" 
-                                     alt="Profile Picture" 
-                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                            {% elif user.student_profile.profile_picture %}
-                                <img src="{{ user.student_profile.profile_picture.url }}" 
-                                     alt="Profile Picture" 
-                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                            {% else %}
-                                <img src="/static/images/default_profile.png" 
-                                     alt="Default Profile Picture" 
-                                     class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                            {% endif %}
-                        </button>
-
-                        <!-- Dropdown Content -->
-                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
-                            <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">
-                                Profile
-                            </a>
-                            <form action="{% url 'signout' %}" method="post" class="w-full">
-                                {% csrf_token %}
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">
-                                    Sign Out
-                                </button>
-                            </form>
+                        <!-- Profile Dropdown -->
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
+                                {% if user.alumni_profile.profile_picture %}
+                                    <img src="{{ user.alumni_profile.profile_picture.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                                {% else %}
+                                    <img src="/static/images/default_profile.png" alt="Default Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                                {% endif %}
+                            </button>
+                            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
+                                <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Profile</a>
+                                <form action="{% url 'signout' %}" method="post" class="w-full">
+                                    {% csrf_token %}
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Sign Out</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    {% elif user.is_student %}
+                        <!-- Student sees Jobs and Gallery -->
+                        <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            Jobs
+                        </a>
+                        <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
+                            Gallery
+                        </a>
+
+                        <!-- Profile Dropdown -->
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
+                                {% if user.student_profile.profile_picture %}
+                                    <img src="{{ user.student_profile.profile_picture.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                                {% else %}
+                                    <img src="/static/images/default_profile.png" alt="Default Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
+                                {% endif %}
+                            </button>
+                            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
+                                <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Profile</a>
+                                <form action="{% url 'signout' %}" method="post" class="w-full">
+                                    {% csrf_token %}
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Sign Out</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% else %}
+                    <!-- Non-authenticated Users -->
                     <a href="{% url 'signin' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
                         Sign In
                     </a>
@@ -80,7 +105,7 @@
             document.getElementById('menu').classList.toggle('hidden');
         });
 
-        document.getElementById('profile-btn').addEventListener('click', function () {
+        document.getElementById('profile-btn')?.addEventListener('click', function () {
             document.getElementById('profile-menu').classList.toggle('hidden');
         });
     </script>

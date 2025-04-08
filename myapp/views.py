@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import *
 from .models import *
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required ,user_passes_test
 from django.contrib import messages
 from django.contrib.auth import logout,login,authenticate
 
@@ -238,3 +238,45 @@ def create_profile_view(request):
         return redirect("profile")  # Redirect to profile page after creation
 
     return render(request, "create_profile.html")
+
+
+
+def is_admin(user):
+    return user.is_staff
+
+
+
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    alumni = AlumniProfile.objects.all()
+    students = StudentProfile.objects.all()
+    jobs = JobPost.objects.all()
+    gallery = Photo.objects.all()
+
+    context = {
+        'alumni': alumni,
+        'students': students,
+        'jobs': jobs,
+        'gallery': gallery,
+    }
+    return render(request, 'admin_dashboard.html', context)
+
+
+
+
+
+def admin_alumni_list(request):
+    alumni = AlumniProfile.objects.all()
+    return render(request, 'alumni_list.html', {'alumni': alumni})
+
+def admin_student_list(request):
+    students = StudentProfile.objects.all()
+    return render(request, 'student_list.html', {'students': students})
+
+def admin_job_list(request):
+    jobs = JobPost.objects.all()
+    return render(request, 'job_list.html', {'jobs': jobs})
+
+def admin_gallery_list(request):
+    gallery = Photo.objects.all()
+    return render(request, 'gallery_list.html', {'gallery': gallery})

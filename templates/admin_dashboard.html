@@ -1,0 +1,45 @@
+
+{% extends "home.html" %}
+{% block content %}
+{% include 'navbar.html' %}
+<div style="max-width: 1000px; margin: auto; padding: 30px;">
+    <h1 style="text-align:center; font-size: 2.5em; margin-bottom: 30px;">Admin Dashboard</h1>
+
+    <!-- Navigation Buttons to Admin Interfaces -->
+    <div style="text-align: center; margin-bottom: 30px;">
+        <a href="{% url 'admin_alumni_list' %}" class="admin-btn">Alumni</a>
+        <a href="{% url 'admin_student_list' %}" class="admin-btn">Students</a>
+        <a href="{% url 'admin_job_list' %}" class="admin-btn">Jobs</a>
+        <a href="{% url 'admin_gallery_list' %}" class="admin-btn">Gallery</a>
+    </div>
+
+    <!-- Welcome Message or Instructions -->
+    <div style="text-align: center;">
+        <p>Select a section to view and manage details.</p>
+    </div>
+</div>
+
+<!-- CSS Styling -->
+<style>
+    .admin-btn {
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border: none;
+        padding: 12px 24px;
+        margin: 10px;
+        border-radius: 5px;
+        font-size: 1em;
+        display: inline-block;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .admin-btn:hover {
+        background-color: #2980b9;
+    }
+
+    h1 {
+        color: #2c3e50;
+    }
+</style>
+{% endblock %}
