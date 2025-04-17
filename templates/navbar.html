@@ -1,112 +1,458 @@
-<body class="bg-gray-100">
-    <nav class="bg-gradient-to-r from-blue-900 to-gray-900 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center py-4 px-6">
-            <!-- Logo -->
-            <a href="{% url 'home' %}" class="flex items-center space-x-3 text-white text-2xl font-semibold hover:opacity-80 transition">
-                <img class="w-12 h-12 rounded-full shadow-lg border-2 border-white" 
-                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" 
-                     alt="Logo">
-                <span class="tracking-wide">Alumni Hub</span>
+<style>
+    /* Base styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Enhanced Navbar */
+    .navbar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Logo section */
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      position: relative;
+      z-index: 110;
+    }
+    
+    .logo-image {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      object-fit: cover;
+    }
+    
+    .navbar-logo:hover .logo-image {
+      transform: scale(1.05);
+      border-color: white;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.05em;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo-text:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: white;
+      transition: width 0.3s ease;
+    }
+    
+    .navbar-logo:hover .logo-text:after {
+      width: 100%;
+    }
+    
+    /* Menu Button */
+    .menu-button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem;
+      display: none;
+      z-index: 110;
+    }
+    
+    .menu-button svg {
+      width: 2rem;
+      height: 2rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .menu-button.active svg {
+      transform: rotate(90deg);
+    }
+    
+    /* Navigation menu */
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1.5px solid transparent;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .nav-link.highlighted {
+      background-color: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    
+    .nav-link.highlighted:hover {
+      background-color: rgba(59, 130, 246, 0.3);
+      border-color: rgba(59, 130, 246, 0.7);
+    }
+    
+    .nav-button {
+      background-color: transparent;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      padding: 0.5rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover {
+      background-color: white;
+      color: #1e3a8a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    /* Profile dropdown */
+    .profile-container {
+      position: relative;
+    }
+    
+    .profile-button {
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    
+    .profile-image {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      object-fit: cover;
+      transition: all 0.3s ease;
+    }
+    
+    .profile-button:hover .profile-image {
+      border-color: white;
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .profile-dropdown {
+      position: absolute;
+      top: calc(100% + 0.75rem);
+      right: 0;
+      width: 12rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      padding: 0.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+    
+    .profile-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .dropdown-item {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #1f2937;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #f3f4f6;
+      color: #2563eb;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background-color: #e5e7eb;
+      margin: 0.5rem 0;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .menu-button {
+        display: block;
+      }
+      
+      .navbar-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #1e293b;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem;
+        gap: 1.5rem;
+        transition: all 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 100;
+      }
+      
+      .navbar-menu.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .nav-link, .nav-button {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+      }
+      
+      .profile-container {
+        margin-top: 1rem;
+      }
+      
+      .profile-dropdown {
+        position: relative;
+        width: 100%;
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-container">
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="navbar-logo">
+        <img class="logo-image" 
+             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" 
+             alt="Alumni Hub Logo">
+        <span class="logo-text">Alumni Hub</span>
+      </a>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="menu-button">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+
+      <!-- Navigation Links -->
+      <div id="main-menu" class="navbar-menu">
+        {% if user.is_authenticated %}
+          {% if user.is_superuser %}
+            <!-- Admin Navigation -->
+            <a href="{% url 'admin_dashboard' %}" class="nav-link highlighted">
+              <i class="fas fa-tachometer-alt"></i>
+              Admin Dashboard
             </a>
-
-            <!-- Mobile Menu Button -->
-            <button id="menu-btn" class="md:hidden text-white focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-
-            <!-- Navigation Links -->
-            <div id="menu" class="hidden md:flex md:items-center md:space-x-4 flex-col md:flex-row absolute md:static bg-gray-900 md:bg-transparent w-full md:w-auto top-16 left-0 md:top-auto md:left-auto py-4 md:py-0 z-50">
-                {% if user.is_authenticated %}
-                    {% if user.is_superuser %}
-                        <!-- Admin sees only Admin Dashboard and Sign Out -->
-                        <a href="{% url 'admin_dashboard' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Admin Dashboard
-                        </a>
-                        <form action="{% url 'signout' %}" method="post" class="ml-4">
-                            {% csrf_token %}
-                            <button type="submit" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                                Sign Out
-                            </button>
-                        </form>
-                    {% elif user.is_alumni %}
-                        <!-- Alumni sees Add Jobs, Jobs, and Gallery -->
-                        <a href="{% url 'add_jobs' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Add Jobs
-                        </a>
-                        <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Jobs
-                        </a>
-                        <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Gallery
-                        </a>
-
-                        <!-- Profile Dropdown -->
-                        <div class="relative">
-                            <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
-                                {% if user.alumni_profile.profile_picture %}
-                                    <img src="{{ user.alumni_profile.profile_picture.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                                {% else %}
-                                    <img src="/static/images/default_profile.png" alt="Default Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                                {% endif %}
-                            </button>
-                            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
-                                <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Profile</a>
-                                <form action="{% url 'signout' %}" method="post" class="w-full">
-                                    {% csrf_token %}
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Sign Out</button>
-                                </form>
-                            </div>
-                        </div>
-                    {% elif user.is_student %}
-                        <!-- Student sees Jobs and Gallery -->
-                        <a href="{% url 'jobpost_list' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Jobs
-                        </a>
-                        <a href="{% url 'photo_gallery' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                            Gallery
-                        </a>
-
-                        <!-- Profile Dropdown -->
-                        <div class="relative">
-                            <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
-                                {% if user.student_profile.profile_picture %}
-                                    <img src="{{ user.student_profile.profile_picture.url }}" alt="Profile Picture" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                                {% else %}
-                                    <img src="/static/images/default_profile.png" alt="Default Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-lg hover:opacity-80 transition duration-300">
-                                {% endif %}
-                            </button>
-                            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
-                                <a href="{% url 'profile' %}" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Profile</a>
-                                <form action="{% url 'signout' %}" method="post" class="w-full">
-                                    {% csrf_token %}
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-900 hover:bg-gray-200">Sign Out</button>
-                                </form>
-                            </div>
-                        </div>
-                    {% endif %}
+            <form action="{% url 'signout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="nav-button">
+                <i class="fas fa-sign-out-alt mr-2"></i>
+                Sign Out
+              </button>
+            </form>
+          
+          {% elif user.is_alumni %}
+            <!-- Alumni Navigation -->
+            <a href="{% url 'add_jobs' %}" class="nav-link">
+              <i class="fas fa-plus-circle"></i>
+              Add Jobs
+            </a>
+            <a href="{% url 'jobpost_list' %}" class="nav-link">
+              <i class="fas fa-briefcase"></i>
+              Jobs
+            </a>
+            <a href="{% url 'photo_gallery' %}" class="nav-link">
+              <i class="fas fa-images"></i>
+              Gallery
+            </a>
+            
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+              <button id="profile-btn" class="profile-button">
+                {% if user.alumni_profile.profile_picture %}
+                  <img class="profile-image" src="{{ user.alumni_profile.profile_picture.url }}" alt="Profile Picture">
                 {% else %}
-                    <!-- Non-authenticated Users -->
-                    <a href="{% url 'signin' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        Sign In
-                    </a>
-                    <a href="{% url 'signup' %}" class="text-white font-semibold px-4 py-2 border-2 border-white rounded-lg hover:bg-white hover:text-blue-900 transition duration-300">
-                        Sign Up
-                    </a>
+                  <img class="profile-image" src="/static/images/default_profile.png" alt="Default Profile">
                 {% endif %}
+              </button>
+              <div id="profile-dropdown" class="profile-dropdown">
+                <div class="dropdown-item" style="background-color: #f8fafc; border-radius: 8px; margin-bottom: 0.5rem;">
+                  <div class="font-medium text-sm text-gray-500">Logged in as</div>
+                  <div class="font-semibold text-gray-800">{{ user.username }}</div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'profile' %}" class="dropdown-item">
+                  <i class="fas fa-user mr-2"></i>
+                  Your Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <form action="{% url 'signout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item text-red-600">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Sign Out
+                  </button>
+                </form>
+              </div>
             </div>
-        </div>
-    </nav>
+          
+          {% elif user.is_student %}
+            <!-- Student Navigation -->
+            <a href="{% url 'jobpost_list' %}" class="nav-link">
+              <i class="fas fa-briefcase"></i>
+              Jobs
+            </a>
+            <a href="{% url 'photo_gallery' %}" class="nav-link">
+              <i class="fas fa-images"></i>
+              Gallery
+            </a>
+            
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+              <button id="profile-btn" class="profile-button">
+                {% if user.student_profile.profile_picture %}
+                  <img class="profile-image" src="{{ user.student_profile.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                  <img class="profile-image" src="/static/images/default_profile.png" alt="Default Profile">
+                {% endif %}
+              </button>
+              <div id="profile-dropdown" class="profile-dropdown">
+                <div class="dropdown-item" style="background-color: #f8fafc; border-radius: 8px; margin-bottom: 0.5rem;">
+                  <div class="font-medium text-sm text-gray-500">Logged in as</div>
+                  <div class="font-semibold text-gray-800">{{ user.username }}</div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'profile' %}" class="dropdown-item">
+                  <i class="fas fa-user mr-2"></i>
+                  Your Profile
+                </a>
+                <div class="dropdown-divider"></div>
+                <form action="{% url 'signout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item text-red-600">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Sign Out
+                  </button>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+        
+        {% else %}
+          <!-- Non-authenticated User Navigation -->
+          <a href="{% url 'signin' %}" class="nav-link">
+            <i class="fas fa-sign-in-alt"></i>
+            Sign In
+          </a>
+          <a href="{% url 'signup' %}" class="nav-button">
+            <i class="fas fa-user-plus mr-2"></i>
+            Sign Up
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
 
-    <!-- JavaScript for Mobile and Profile Menu -->
-    <script>
-        document.getElementById('menu-btn').addEventListener('click', function () {
-            document.getElementById('menu').classList.toggle('hidden');
+  <script>
+    // Toggle mobile menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mainMenu = document.getElementById('main-menu');
+    
+    menuBtn.addEventListener('click', function() {
+      menuBtn.classList.toggle('active');
+      mainMenu.classList.toggle('active');
+      document.body.classList.toggle('overflow-hidden');
+    });
+    
+    // Toggle profile dropdown
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    
+    if (profileBtn && profileDropdown) {
+      profileBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function(e) {
+        if (profileDropdown.classList.contains('active') && !profileDropdown.contains(e.target)) {
+          profileDropdown.classList.remove('active');
+        }
+      });
+    }
+    
+    // Prevent dropdown from closing when clicking inside it
+    if (profileDropdown) {
+      profileDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
+    
+    // Add smooth scrolling effect for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
         });
-
-        document.getElementById('profile-btn')?.addEventListener('click', function () {
-            document.getElementById('profile-menu').classList.toggle('hidden');
-        });
-    </script>
+      });
+    });
+  </script>
 </body>

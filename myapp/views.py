@@ -3,9 +3,11 @@ from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required ,user_passes_test
 from django.contrib import messages
-from django.contrib.auth import logout,login,authenticate
+from django.contrib.auth import logout,login,authenticate,get_user_model
 from django.http import HttpResponseForbidden
 from django.db.models import Q
+from django.http import JsonResponse
+
 
 # Create your views here.
 
@@ -20,7 +22,7 @@ def add_job(request):
             return redirect('jobpost_list')  # Change this to your actual job listing view name
     else:
         form = JobPostForm()
-    return render(request, 'add_job.html', {'form': form})
+    return render(request, 'addjobs.html', {'form': form})
 
 
 def signup_view(request):
@@ -35,6 +37,7 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, "signup.html", {"form": form})
 
+
 def signin_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -43,7 +46,6 @@ def signin_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "You have successfully signed in.")
             return redirect('home')
         else:
             messages.error(request, "Invalid username or password.")
@@ -57,7 +59,9 @@ def home_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, "You have successfully signout.")
     return redirect('signin')
+
 
 
 #job posts all operations
@@ -228,43 +232,6 @@ def edit_profile_view(request):
 
     return render(request, "edit_profile.html", {"form": form})
 
-# @login_required
-# def create_profile_view(request):
-#     if request.method == "POST":
-#         user_type = request.POST.get("user_type")
-        
-#         if user_type == "alumni":
-#             company = request.POST.get("company", "")
-#             job_title = request.POST.get("job_title", "")
-#             graduation_year = request.POST.get("graduation_year", 2025)
-#             linkedin = request.POST.get("linkedin", "")
-            
-#             AlumniProfile.objects.create(
-#                 user=request.user,
-#                 company=company,
-#                 job_title=job_title,
-#                 graduation_year=graduation_year,
-#                 linkedin=linkedin
-#             )
-        
-#         elif user_type == "student":
-#             enrollment_year = request.POST.get("enrollment_year")
-#             major = request.POST.get("major", "")
-            
-#             # Ensure enrollment_year is provided before creating the profile
-#             if not enrollment_year:
-#                 messages.error(request, "Enrollment year is required for students.")
-#                 return render(request, "create_profile.html")
-            
-#             StudentProfile.objects.create(
-#                 user=request.user,
-#                 enrollment_year=enrollment_year,
-#                 major=major
-#             )
-
-#         return redirect("profile")  # Redirect to profile page after creation
-
-#     return render(request, "create_profile.html")
 
 
 
@@ -289,9 +256,6 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', context)
 
 
-
-
-
 def admin_alumni_list(request):
     alumni = AlumniProfile.objects.all()
     return render(request, 'alumni_list.html', {'alumni': alumni})
@@ -307,3 +271,4 @@ def admin_job_list(request):
 def admin_gallery_list(request):
     gallery = Photo.objects.all()
     return render(request, 'gallery_list.html', {'gallery': gallery})
+

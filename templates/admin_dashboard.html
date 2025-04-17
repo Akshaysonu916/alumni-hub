@@ -1,45 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+  {% include 'navbar.html' %}
 
-{% extends "home.html" %}
-{% block content %}
-{% include 'navbar.html' %}
-<div style="max-width: 1000px; margin: auto; padding: 30px;">
-    <h1 style="text-align:center; font-size: 2.5em; margin-bottom: 30px;">Admin Dashboard</h1>
-
-    <!-- Navigation Buttons to Admin Interfaces -->
-    <div style="text-align: center; margin-bottom: 30px;">
-        <a href="{% url 'admin_alumni_list' %}" class="admin-btn">Alumni</a>
-        <a href="{% url 'admin_student_list' %}" class="admin-btn">Students</a>
-        <a href="{% url 'admin_job_list' %}" class="admin-btn">Jobs</a>
-        <a href="{% url 'admin_gallery_list' %}" class="admin-btn">Gallery</a>
+  <div class="max-w-7xl mx-auto p-6">
+    <div class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-2xl p-8 shadow-lg mb-10">
+      <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+      <p class="mt-2 text-white/80">Welcome back, Admin. Here's an overview of your system.</p>
     </div>
 
-    <!-- Welcome Message or Instructions -->
-    <div style="text-align: center;">
-        <p>Select a section to view and manage details.</p>
+    <!-- Main Cards Grid -->
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+      <!-- Alumni Card -->
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+        <div class="h-24 flex items-center justify-center text-4xl bg-blue-100 text-blue-600">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="p-6 flex flex-col justify-between flex-grow text-center">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-1">Alumni Management</h3>
+            <p class="text-sm text-gray-500 mb-4">Track and manage alumni network, update profiles and achievements.</p>
+          </div>
+          <a href="{% url 'admin_alumni_list' %}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md font-medium inline-block">Manage Alumni</a>
+        </div>
+      </div>
+
+      <!-- Students Card -->
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+        <div class="h-24 flex items-center justify-center text-4xl bg-green-100 text-green-600">
+          <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="p-6 flex flex-col justify-between flex-grow text-center">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-1">Student Management</h3>
+            <p class="text-sm text-gray-500 mb-4">Add, update, and manage current student information and records.</p>
+          </div>
+          <a href="{% url 'admin_student_list' %}" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md font-medium inline-block">Manage Students</a>
+        </div>
+      </div>
+
+      <!-- Jobs Card -->
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+        <div class="h-24 flex items-center justify-center text-4xl bg-red-100 text-red-600">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <div class="p-6 flex flex-col justify-between flex-grow text-center">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-1">Job Listings</h3>
+            <p class="text-sm text-gray-500 mb-4">Post and manage job opportunities for students and alumni.</p>
+          </div>
+          <a href="{% url 'admin_job_list' %}" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md font-medium inline-block">Manage Jobs</a>
+        </div>
+      </div>
+
+      <!-- Gallery Card -->
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+        <div class="h-24 flex items-center justify-center text-4xl bg-purple-100 text-purple-600">
+          <i class="fas fa-images"></i>
+        </div>
+        <div class="p-6 flex flex-col justify-between flex-grow text-center">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-1">Gallery Management</h3>
+            <p class="text-sm text-gray-500 mb-4">Upload and organize images for events, achievements, and campus life.</p>
+          </div>
+          <a href="{% url 'admin_gallery_list' %}" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md font-medium inline-block">Manage Gallery</a>
+        </div>
+      </div>
     </div>
-</div>
 
-<!-- CSS Styling -->
-<style>
-    .admin-btn {
-        background-color: #3498db;
-        color: white;
-        text-decoration: none;
-        border: none;
-        padding: 12px 24px;
-        margin: 10px;
-        border-radius: 5px;
-        font-size: 1em;
-        display: inline-block;
-        transition: background-color 0.3s ease-in-out;
-    }
+    <!-- Stats Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-md">
+      <h2 class="text-xl font-semibold mb-4">System Overview</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-gray-50 rounded-lg text-center p-4">
+          <div id="alumni-count" class="text-2xl font-bold text-gray-800">241</div>
+          <div class="text-sm text-gray-500">Total Alumni</div>
+        </div>
+        <div class="bg-gray-50 rounded-lg text-center p-4">
+          <div id="student-count" class="text-2xl font-bold text-gray-800">568</div>
+          <div class="text-sm text-gray-500">Current Students</div>
+        </div>
+        <div class="bg-gray-50 rounded-lg text-center p-4">
+          <div id="job-count" class="text-2xl font-bold text-gray-800">42</div>
+          <div class="text-sm text-gray-500">Active Job Listings</div>
+        </div>
+        <div class="bg-gray-50 rounded-lg text-center p-4">
+          <div id="gallery-count" class="text-2xl font-bold text-gray-800">126</div>
+          <div class="text-sm text-gray-500">Gallery Images</div>
+        </div>
+      </div>
+    </div>
 
-    .admin-btn:hover {
-        background-color: #2980b9;
-    }
+    <!-- Quick Actions -->
+    {% comment %} <div class="mt-10 flex flex-wrap gap-4">
+      <button class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium px-4 py-2 rounded-md">
+        <i class="fas fa-plus"></i>
+        <span>Add New User</span>
+      </button>
+      <button class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium px-4 py-2 rounded-md">
+        <i class="fas fa-file-export"></i>
+        <span>Export Reports</span>
+      </button>
+      <button class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-medium px-4 py-2 rounded-md">
+        <i class="fas fa-cog"></i>
+        <span>System Settings</span>
+      </button>
+    </div>
+  </div> {% endcomment %}
 
-    h1 {
-        color: #2c3e50;
-    }
-</style>
-{% endblock %}
+  <script>
+    $(document).ready(function() {
+      function animateCounter(id, endValue) {
+        let startValue = 0;
+        let duration = 1500;
+        let counter = setInterval(function() {
+          startValue += 1;
+          document.getElementById(id).textContent = startValue;
+          if (startValue >= endValue) {
+            clearInterval(counter);
+          }
+        }, duration / endValue);
+      }
+      
+    });
+  </script>
+</body>
+</html>

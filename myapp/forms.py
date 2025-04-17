@@ -90,7 +90,7 @@ class PhotoForm(forms.ModelForm):
 class AlumniProfileForm(forms.ModelForm):
     class Meta:
         model = AlumniProfile
-        fields = ["company", "job_title", "graduation_year", "linkedin","profile_picture"]
+        fields = ["company", "job_title", "graduation_year", "linkedin","profile_picture","department"]
 
 class StudentProfileForm(forms.ModelForm):
     class Meta:

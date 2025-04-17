@@ -20,7 +20,7 @@ class AlumniProfile(models.Model):
     linkedin = models.URLField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     department = models.CharField(max_length=100)  # <- Make sure this exists
-    passout_year = models.IntegerField()           # <- And this too
+    passout_year = models.IntegerField(default=2025)           # <- And this too
 
 
     def __str__(self):

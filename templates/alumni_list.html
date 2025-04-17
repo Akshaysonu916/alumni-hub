@@ -1,33 +1,40 @@
 {% extends "home.html" %}
 {% block content %}
-<div style="max-width: 900px; margin: auto; padding: 30px;">
-    <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Alumni List</h2>
+{% include "navbar.html" %}
 
-    <a href="{% url 'admin_dashboard' %}" style="display: inline-block; margin-bottom: 20px; color: #3498db;">← Back to Dashboard</a>
+<section class="min-h-screen bg-gray-100 py-10 px-4">
+    <div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">🎓 Alumni List</h2>
+            <a href="{% url 'admin_dashboard' %}" class="text-blue-600 hover:underline text-sm">← Back to Dashboard</a>
+        </div>
 
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #ddd; padding: 10px;">Username</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">Department</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">Passout Year</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for alumni in alumni %}
-                <tr>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ alumni.user.username }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ alumni.department }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ alumni.passout_year }}</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">{{ alumni.user.email }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4" style="text-align: center; padding: 20px;">No alumni found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                    <tr>
+                        <th class="py-3 px-6 text-left">Username</th>
+                        <th class="py-3 px-6 text-left">Department</th>
+                        <th class="py-3 px-6 text-left">Passout Year</th>
+                        <th class="py-3 px-6 text-left">Email</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700 text-sm divide-y divide-gray-200">
+                    {% for alumni in alumni %}
+                        <tr class="hover:bg-gray-50 transition-all duration-200">
+                            <td class="py-3 px-6 font-medium">{{ alumni.user.username }}</td>
+                            <td class="py-3 px-6">{{ alumni.department }}</td>
+                            <td class="py-3 px-6">{{ alumni.passout_year }}</td>
+                            <td class="py-3 px-6">{{ alumni.user.email }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-6 text-gray-500">No alumni found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 {% endblock %}
