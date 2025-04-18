@@ -255,41 +255,59 @@ def admin_dashboard(request):
     }
     return render(request, 'admin_dashboard.html', context)
 
-
+@login_required(login_url='signin')
 def admin_alumni_list(request):
     alumni = AlumniProfile.objects.all()
     return render(request, 'alumni_list.html', {'alumni': alumni})
 
+@login_required(login_url='signin')
 def admin_student_list(request):
     students = StudentProfile.objects.all()
     return render(request, 'student_list.html', {'students': students})
 
+@login_required(login_url='signin')
 def admin_job_list(request):
     jobs = JobPost.objects.all()
     return render(request, 'job_list.html', {'jobs': jobs})
 
+@login_required(login_url='signin')
 def admin_gallery_list(request):
     gallery = Photo.objects.all()
     return render(request, 'gallery_list.html', {'gallery': gallery})
 
 
 # List all alumni
+@login_required(login_url='signin')
 def alumni_list(request):
     alumni_profiles = AlumniProfile.objects.select_related('user').all()
     return render(request, 'user_alumni_list.html', {'alumni_profiles': alumni_profiles})
 
 # List all students
+@login_required(login_url='signin')
 def student_list(request):
     student_profiles = StudentProfile.objects.select_related('user').all()
     return render(request, 'user_student_list.html', {'student_profiles': student_profiles})
 
 # Detail view for alumni
+@login_required(login_url='signin')
 def alumni_detail(request, username):
     alumni = get_object_or_404(AlumniProfile, user__username=username)
     return render(request, 'alumni_detail.html', {'alumni': alumni})
 
 # Detail view for student
+@login_required(login_url='signin')
 def student_detail(request, username):
     student = get_object_or_404(StudentProfile, user__username=username)
     return render(request, 'student_detail.html', {'student': student})
 
+
+
+@login_required(login_url='signin')
+def combined_user_list(request):
+    alumni_profiles = AlumniProfile.objects.select_related('user')
+    student_profiles = StudentProfile.objects.select_related('user')
+
+    return render(request, 'combined_user_list.html', {
+        'alumni_profiles': alumni_profiles,
+        'student_profiles': student_profiles,
+    })

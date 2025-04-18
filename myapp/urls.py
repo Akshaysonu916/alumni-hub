@@ -28,4 +28,5 @@ urlpatterns = [
     path('userstudents/', student_list, name='student_list'),
     path('alumni/<str:username>/', alumni_detail, name='alumni_detail'),
     path('students/<str:username>/',student_detail, name='student_detail'),
+    path('users/', combined_user_list, name='combined_user_list'),
 ]
