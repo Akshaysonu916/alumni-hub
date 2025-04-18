@@ -1,0 +1,20 @@
+{% extends "home.html" %}
+{% load static %}
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+  <div class="text-center">
+    {% if student.profile_picture %}
+      <img src="{{ student.profile_picture.url }}" class="w-32 h-32 rounded-full mx-auto" alt="Profile Image">
+    {% else %}
+      <img src="{% static 'default_profile.png' %}" class="w-32 h-32 rounded-full mx-auto" alt="Default Image">
+    {% endif %}
+    <h2 class="text-2xl font-bold mt-4">{{ student.user.get_full_name }}</h2>
+    <p class="text-gray-600">{{ student.major }}</p>
+    <p class="text-gray-500">Enrolled in {{ student.enrollment_year }}</p>
+
+    {% if student.resume %}
+      <a href="{{ student.resume.url }}" target="_blank" class="text-blue-600 underline mt-2 inline-block">View Resume</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

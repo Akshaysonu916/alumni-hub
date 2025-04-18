@@ -1,0 +1,20 @@
+{% extends "home.html" %}
+{% load static %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Student Profiles</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {% for profile in student_profiles %}
+    <div class="bg-white p-4 rounded shadow text-center">
+      {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto" alt="Profile Image">
+      {% else %}
+        <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto" alt="Default Image">
+      {% endif %}
+      <h3 class="text-lg font-semibold mt-2">{{ profile.user.username }}</h3>
+      <p class="text-sm text-gray-600">{{ profile.major }}</p>
+      <p class="text-sm text-gray-500">Enrolled in {{ profile.enrollment_year }}</p>
+      <a href="{% url 'student_detail' profile.user.username %}" class="text-blue-500 mt-2 inline-block">View Profile</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

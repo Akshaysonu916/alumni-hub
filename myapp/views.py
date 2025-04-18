@@ -272,3 +272,24 @@ def admin_gallery_list(request):
     gallery = Photo.objects.all()
     return render(request, 'gallery_list.html', {'gallery': gallery})
 
+
+# List all alumni
+def alumni_list(request):
+    alumni_profiles = AlumniProfile.objects.select_related('user').all()
+    return render(request, 'user_alumni_list.html', {'alumni_profiles': alumni_profiles})
+
+# List all students
+def student_list(request):
+    student_profiles = StudentProfile.objects.select_related('user').all()
+    return render(request, 'user_student_list.html', {'student_profiles': student_profiles})
+
+# Detail view for alumni
+def alumni_detail(request, username):
+    alumni = get_object_or_404(AlumniProfile, user__username=username)
+    return render(request, 'alumni_detail.html', {'alumni': alumni})
+
+# Detail view for student
+def student_detail(request, username):
+    student = get_object_or_404(StudentProfile, user__username=username)
+    return render(request, 'student_detail.html', {'student': student})
+

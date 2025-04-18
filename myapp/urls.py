@@ -24,4 +24,8 @@ urlpatterns = [
     path('students/', admin_student_list, name='admin_student_list'),
     path('jobs/', admin_job_list, name='admin_job_list'),
     path('gallery/', admin_gallery_list, name='admin_gallery_list'),
+    path('useralumni/', alumni_list, name='alumni_list'),
+    path('userstudents/', student_list, name='student_list'),
+    path('alumni/<str:username>/', alumni_detail, name='alumni_detail'),
+    path('students/<str:username>/',student_detail, name='student_detail'),
 ]
