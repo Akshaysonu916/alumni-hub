@@ -1,6 +1,8 @@
 {% extends "home.html" %}
 {% load static %}
 {% block content %}
+{% include "navbar.html" %}
+
 <div class="max-w-6xl mx-auto px-4 py-8">
   <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">
     <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">Community Members</span>
@@ -11,7 +13,7 @@
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="relative w-full md:max-w-md">
         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
           </svg>
         </div>
@@ -27,27 +29,9 @@
     </div>
   </div>
 
-  <!-- Stats Summary -->
-  <div class="bg-gradient-to-r from-blue-100 to-indigo-100 p-4 rounded-lg mb-8 shadow-sm">
-    <div class="grid grid-cols-3 gap-4 text-center">
-      <div class="p-3">
-        <p class="text-2xl font-bold text-blue-700" id="totalCount">{{ alumni_profiles|length|add:student_profiles|length }}</p>
-        <p class="text-sm font-medium text-gray-600">Total Members</p>
-      </div>
-      <div class="p-3">
-        <p class="text-2xl font-bold text-blue-700" id="alumniCount">{{ alumni_profiles|length }}</p>
-        <p class="text-sm font-medium text-gray-600">Alumni</p>
-      </div>
-      <div class="p-3">
-        <p class="text-2xl font-bold text-blue-700" id="studentCount">{{ student_profiles|length }}</p>
-        <p class="text-sm font-medium text-gray-600">Students</p>
-      </div>
-    </div>
-  </div>
-
   <!-- No Results Message -->
   <div id="noResults" class="hidden text-center p-8 bg-gray-50 rounded-lg mb-8">
-    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
     </svg>
     <h3 class="mt-4 text-lg font-medium text-gray-900">No matching results</h3>
@@ -57,96 +41,87 @@
   <!-- Profiles Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="profilesGrid">
     {% for profile in alumni_profiles %}
-      <div class="user-card alumni bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
-        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
-        <div class="p-6 text-center">
-          <div class="relative -mt-12 mb-4">
-            {% if profile.profile_picture %}
-              <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
-            {% else %}
-              <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
-            {% endif %}
-          </div>
-          <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
-          <p class="text-blue-600 font-medium">{{ profile.job_title }}</p>
-          <p class="text-gray-600">{{ profile.company }}</p>
-          <div class="mt-4 pt-4 border-t border-gray-100">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-              {{ profile.department }}
-            </span>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-              Class of {{ profile.graduation_year }}
-            </span>
+      {% if profile.user != request.user %}
+        <div class="user-card alumni bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
+          <div class="p-6 text-center">
+            <div class="relative -mt-12 mb-4">
+              {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
+              {% else %}
+                <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
+              {% endif %}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
+            <p class="text-blue-600 font-medium">{{ profile.job_title }}</p>
+            <p class="text-gray-600">{{ profile.company }}</p>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {{ profile.department }}
+              </span>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                Class of {{ profile.graduation_year }}
+              </span>
+            </div>
+            <div class="mt-4">
+              <a href="{% url 'view_profile' profile.user.id %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
+                View Profile
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      {% endif %}
     {% endfor %}
 
     {% for profile in student_profiles %}
-      <div class="user-card student bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
-        <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
-        <div class="p-6 text-center">
-          <div class="relative -mt-12 mb-4">
-            {% if profile.profile_picture %}
-              <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
-            {% else %}
-              <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
-            {% endif %}
-          </div>
-          <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
-          <p class="text-green-600 font-medium">{{ profile.major }}</p>
-          <div class="mt-4 pt-4 border-t border-gray-100">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-              Enrolled {{ profile.enrollment_year }}
-            </span>
+      {% if profile.user != request.user %}
+        <div class="user-card student bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+          <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
+          <div class="p-6 text-center">
+            <div class="relative -mt-12 mb-4">
+              {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
+              {% else %}
+                <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
+              {% endif %}
+            </div>
+            <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
+            <p class="text-green-600 font-medium">{{ profile.major }}</p>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                Enrolled {{ profile.enrollment_year }}
+              </span>
+            </div>
+            <div class="mt-4">
+              <a href="{% url 'view_profile' profile.user.id %}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
+                View Profile
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      {% endif %}
     {% endfor %}
   </div>
 
   <!-- JavaScript Filtering & Searching -->
   <script>
-    // Keep track of counts for displaying
-    {% comment %} let totalProfiles = {{ alumni_profiles|length|add:student_profiles|length }}; {% endcomment %}
-    let alumniProfiles = {{ alumni_profiles|length }};
-    let studentProfiles = {{ student_profiles|length }};
-    
     function updateFilterButtons(activeType) {
-      // Reset all buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('bg-blue-600', 'text-white');
         btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
       });
-      
-      // Set active button
-      if (activeType === 'all') {
-        document.getElementById('allBtn').classList.add('bg-blue-600', 'text-white');
-        document.getElementById('allBtn').classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-      } else if (activeType === 'alumni') {
-        document.getElementById('alumniBtn').classList.add('bg-blue-600', 'text-white');
-        document.getElementById('alumniBtn').classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-      } else if (activeType === 'student') {
-        document.getElementById('studentBtn').classList.add('bg-blue-600', 'text-white');
-        document.getElementById('studentBtn').classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-      }
+
+      const btn = document.getElementById(activeType + 'Btn');
+      btn.classList.add('bg-blue-600', 'text-white');
+      btn.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
     }
 
     function filterUsers(type) {
       updateFilterButtons(type);
       const cards = document.querySelectorAll('.user-card');
-      let visibleCount = 0;
-      
       cards.forEach(card => {
-        if (type === 'all' || card.classList.contains(type)) {
-          card.style.display = 'block';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = (type === 'all' || card.classList.contains(type)) ? 'block' : 'none';
       });
-      
-      // Also apply any existing search filter
       searchUsers();
     }
 
@@ -154,9 +129,9 @@
       const input = document.getElementById('searchInput').value.toLowerCase();
       const cards = document.querySelectorAll('.user-card');
       let visibleCount = 0;
-      
+
       cards.forEach(card => {
-        if (card.style.display !== 'none') { // Only search visible cards (respecting filter)
+        if (card.style.display !== 'none') {
           const text = card.textContent.toLowerCase();
           if (text.includes(input)) {
             card.style.display = 'block';
@@ -166,21 +141,20 @@
           }
         }
       });
-      
-      // Show or hide no results message
+
       document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
     }
 
-    // Attach search as user types with debounce
     let searchTimeout;
-    document.getElementById('searchInput').addEventListener('input', function() {
+    document.getElementById('searchInput').addEventListener('input', function () {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(searchUsers, 300);
     });
-    
-    // Initialize with "All" filter
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
       filterUsers('all');
     });
   </script>
+</div>
+
 {% endblock %}

@@ -311,3 +311,29 @@ def combined_user_list(request):
         'alumni_profiles': alumni_profiles,
         'student_profiles': student_profiles,
     })
+
+
+def view_profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    # Try to get the user's profile from either Alumni or Student
+    profile = None
+    profile_type = None
+
+    try:
+        profile = AlumniProfile.objects.get(user=user)
+        profile_type = "alumni"
+    except AlumniProfile.DoesNotExist:
+        try:
+            profile = StudentProfile.objects.get(user=user)
+            profile_type = "student"
+        except StudentProfile.DoesNotExist:
+            profile = None
+
+    if not profile:
+        return render(request, 'profile_not_found.html', {'user': user})
+
+    return render(request, 'profile_detail.html', {
+        'profile': profile,
+        'profile_type': profile_type
+    })

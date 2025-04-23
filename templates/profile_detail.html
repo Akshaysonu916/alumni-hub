@@ -1,0 +1,23 @@
+{% extends 'home.html' %}
+{% load static%}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="bg-white rounded-xl shadow-md p-8 text-center">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ profile.user.username }}</h1>
+
+    {% if profile.profile_picture %}
+      <img src="{{ profile.profile_picture.url }}" alt="Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4">
+    {% else %}
+      <img src="{% static 'default_profile.png' %}" alt="Default Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4">
+    {% endif %}
+
+    {% if profile_type == 'alumni' %}
+      <p class="text-lg text-blue-600">{{ profile.job_title }} at {{ profile.company }}</p>
+      <p class="text-gray-600">{{ profile.department }} — Class of {{ profile.graduation_year }}</p>
+    {% elif profile_type == 'student' %}
+      <p class="text-lg text-green-600">{{ profile.major }}</p>
+      <p class="text-gray-600">Enrolled in {{ profile.enrollment_year }}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
