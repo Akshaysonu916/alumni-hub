@@ -42,9 +42,10 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="profilesGrid">
     {% for profile in alumni_profiles %}
       {% if profile.user != request.user %}
-        <div class="user-card alumni bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+        <div class="user-card alumni relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
+          <a href="{% url 'view_profile' profile.user.id %}" class="absolute inset-0 z-10"></a>
           <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
-          <div class="p-6 text-center">
+          <div class="p-6 text-center pointer-events-none">
             <div class="relative -mt-12 mb-4">
               {% if profile.profile_picture %}
                 <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
@@ -63,11 +64,6 @@
                 Class of {{ profile.graduation_year }}
               </span>
             </div>
-            <div class="mt-4">
-              <a href="{% url 'view_profile' profile.user.id %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
-                View Profile
-              </a>
-            </div>
           </div>
         </div>
       {% endif %}
@@ -75,9 +71,10 @@
 
     {% for profile in student_profiles %}
       {% if profile.user != request.user %}
-        <div class="user-card student bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+        <div class="user-card student relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
+          <a href="{% url 'view_profile' profile.user.id %}" class="absolute inset-0 z-10"></a>
           <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
-          <div class="p-6 text-center">
+          <div class="p-6 text-center pointer-events-none">
             <div class="relative -mt-12 mb-4">
               {% if profile.profile_picture %}
                 <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
@@ -91,11 +88,6 @@
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 Enrolled {{ profile.enrollment_year }}
               </span>
-            </div>
-            <div class="mt-4">
-              <a href="{% url 'view_profile' profile.user.id %}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg">
-                View Profile
-              </a>
             </div>
           </div>
         </div>
