@@ -11,6 +11,10 @@ from django.http import JsonResponse
 
 # Create your views here.
 
+def is_alumni(user):
+    return user.is_authenticated and user.profile.user_type == 'alumni'
+
+@user_passes_test(is_alumni)
 @login_required(login_url='signin')
 def add_job(request):
     if request.method == 'POST':
@@ -38,6 +42,10 @@ def signup_view(request):
     return render(request, "signup.html", {"form": form})
 
 
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.shortcuts import redirect, render
+
 def signin_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -46,12 +54,23 @@ def signin_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+
+            # Check if admin (either superuser or staff)
+            if user.is_superuser or user.is_staff:
+                return redirect('admin_dashboard')  # or use reverse('admin:index')
+            
+            # Check user type from profile or directly from user model
+            elif hasattr(user, 'profile') and user.profile.user_type in ['alumni', 'student']:
+                return redirect('home')
+
+            # Fallback redirect
             return redirect('home')
         else:
             messages.error(request, "Invalid username or password.")
             return redirect('signin')
 
     return render(request, 'signin.html')
+
 
 def home_view(request):
     return render(request,'home.html',{'user':request.user})
@@ -255,11 +274,13 @@ def admin_dashboard(request):
     }
     return render(request, 'admin_dashboard.html', context)
 
+@user_passes_test(is_admin)
 @login_required(login_url='signin')
 def admin_alumni_list(request):
     alumni = AlumniProfile.objects.all()
     return render(request, 'alumni_list.html', {'alumni': alumni})
 
+@user_passes_test(is_admin)
 @login_required(login_url='signin')
 def admin_student_list(request):
     students = StudentProfile.objects.all()
