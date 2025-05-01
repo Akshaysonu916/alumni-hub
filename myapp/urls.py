@@ -32,5 +32,8 @@ urlpatterns = [
     path('profile/<int:user_id>/',view_profile, name='view_profile'),
     path('notifications/', my_notifications, name='my_notifications'),
     path('delete-notification/<int:notification_id>/',delete_notification, name='delete_notification'),
-
+    path('connect/<int:user_id>/', send_connection_request, name='connect'),
+    path('accept/<int:connection_id>/', accept_connection_request, name='accept_connection'),
+    path('remove/<int:user_id>/', remove_connection, name='remove_connection'),
+    path('disconnect/<int:user_id>/', disconnect_connection, name='disconnect_connection'),
 ]

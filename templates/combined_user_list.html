@@ -3,6 +3,8 @@
 {% block content %}
 {% include "navbar.html" %}
 
+
+
 <div class="max-w-6xl mx-auto px-4 py-8">
   <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">
     <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">Community Members</span>
@@ -40,10 +42,10 @@
 
   <!-- Profiles Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="profilesGrid">
+
     {% for profile in alumni_profiles %}
       {% if profile.user != request.user %}
         <div class="user-card alumni relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
-          <a href="{% url 'view_profile' profile.user.id %}" class="absolute inset-0 z-10"></a>
           <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
           <div class="p-6 text-center pointer-events-none">
             <div class="relative -mt-12 mb-4">
@@ -64,6 +66,9 @@
                 Class of {{ profile.graduation_year }}
               </span>
             </div>
+            <div class="mt-4 pointer-events-auto">
+              {% include "connection_buttons.html" with user=profile.user %}
+            </div>
           </div>
         </div>
       {% endif %}
@@ -72,7 +77,6 @@
     {% for profile in student_profiles %}
       {% if profile.user != request.user %}
         <div class="user-card student relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
-          <a href="{% url 'view_profile' profile.user.id %}" class="absolute inset-0 z-10"></a>
           <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
           <div class="p-6 text-center pointer-events-none">
             <div class="relative -mt-12 mb-4">
@@ -88,6 +92,9 @@
               <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                 Enrolled {{ profile.enrollment_year }}
               </span>
+            </div>
+            <div class="mt-4 pointer-events-auto">
+              {% include "connection_buttons.html" with user=profile.user %}
             </div>
           </div>
         </div>

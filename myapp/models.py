@@ -71,6 +71,19 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.title or f"Photo {self.id}"# Return the title or a default string
+    
+
+class Connection(models.Model):
+    from_user = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+    is_accepted = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')  # Prevent duplicate requests
+
+    def _str_(self):
+        return f"{self.from_user} → {self.to_user} ({'Accepted' if self.is_accepted else 'Pending'})"
 
 # Chat Model (Between Alumni & Students)
 # class ChatMessage(models.Model):

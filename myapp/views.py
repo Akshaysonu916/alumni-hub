@@ -389,12 +389,37 @@ def student_detail(request, username):
 
 @login_required(login_url='signin')
 def combined_user_list(request):
-    alumni_profiles = AlumniProfile.objects.select_related('user')
-    student_profiles = StudentProfile.objects.select_related('user')
+    current_user = request.user
+
+    # Fetch profiles, excluding the current user
+    alumni_profiles = AlumniProfile.objects.select_related('user').exclude(user=current_user)
+    student_profiles = StudentProfile.objects.select_related('user').exclude(user=current_user)
+
+    # Fetch connection data
+    sent_requests = Connection.objects.filter(from_user=current_user, is_accepted=False)
+    received_requests = Connection.objects.filter(to_user=current_user, is_accepted=False)
+    connections = Connection.objects.filter(
+        Q(from_user=current_user) | Q(to_user=current_user),
+        is_accepted=True
+    )
+
+    # Build ID sets
+    sent_ids = set(sent_requests.values_list('to_user_id', flat=True))
+    received_ids = set(received_requests.values_list('from_user_id', flat=True))
+    connected_ids = set()
+    for conn in connections:
+        connected_ids.add(conn.to_user.id if conn.from_user == current_user else conn.from_user.id)
+
+    # Store the received connections for easy lookup
+    received_connections = {conn.from_user.id: conn for conn in received_requests}
 
     return render(request, 'combined_user_list.html', {
         'alumni_profiles': alumni_profiles,
         'student_profiles': student_profiles,
+        'sent_requests': sent_ids,
+        'received_requests': received_ids,
+        'connected_ids': connected_ids,
+        'received_connections': received_connections,  # Pass connections for accepting
     })
 
 
@@ -433,3 +458,54 @@ def my_notifications(request):
     request.user.notifications.filter(is_read=False).update(is_read=True)
 
     return render(request, 'notification.html', {'notifications': notifications})
+
+@login_required
+def send_connection_request(request, user_id):
+    target_user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        Connection.objects.create(from_user=request.user, to_user=target_user)
+    return redirect('combined_user_list')
+
+@login_required
+def accept_connection_request(request, connection_id):
+    # Get the connection object using the connection_id from the URL
+    connection = get_object_or_404(Connection, id=connection_id, to_user=request.user, is_accepted=False)
+
+    # Update the connection request to accepted
+    connection.is_accepted = True
+    connection.save()
+
+    # Redirect after accepting
+    return redirect('combined_user_list')  # or any other page you want
+
+@login_required
+def remove_connection(request, user_id):
+    Connection.objects.filter(
+        (models.Q(from_user=request.user, to_user_id=user_id) |
+         models.Q(from_user_id=user_id, to_user=request.user))
+    ).delete()
+    return redirect('combined_user_list')
+
+@login_required
+def disconnect_connection(request, user_id):
+    # Try to find an accepted connection from the current user to the specified user
+    try:
+        # Look for an accepted connection either from user to target or from target to user
+        connection = Connection.objects.get(
+            (Q(from_user=request.user, to_user_id=user_id) | Q(from_user_id=user_id, to_user=request.user)),
+            is_accepted=True
+        )
+    except Connection.DoesNotExist:
+        # Handle case where no valid connection exists
+        messages.error(request, "No valid connection found to disconnect.")
+        return redirect('combined_user_list')  # Redirect back to users list
+
+    # Set the connection status to False to mark as disconnected
+    connection.is_accepted = False
+    connection.save()
+
+    # Optionally, add a success message
+    messages.success(request, "You have successfully disconnected.")
+
+    # Redirect to the users page or wherever you need
+    return redirect('combined_user_list')
