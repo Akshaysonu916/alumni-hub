@@ -509,3 +509,11 @@ def disconnect_connection(request, user_id):
 
     # Redirect to the users page or wherever you need
     return redirect('combined_user_list')
+
+
+def cancel_request(request, user_id):
+    to_user = get_object_or_404(User, id=user_id)
+    connection = Connection.objects.filter(from_user=request.user, to_user=to_user, is_accepted=False).first()
+    if connection:
+        connection.delete()
+    return redirect('combined_user_list')  # or your actual user list view name

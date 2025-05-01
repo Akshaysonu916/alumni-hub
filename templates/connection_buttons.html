@@ -4,7 +4,10 @@
         <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg">Disconnect</button>
     </form>
 {% elif user.id in sent_requests %}
-    <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed">Request Sent</button>
+    <form method="post" action="{% url 'cancel_request' user.id %}">
+        {% csrf_token %}
+        <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded-lg">Cancel Request</button>
+    </form>
 {% elif user.id in received_requests %}
     {% for conn in received_connections.values %}
         {% if conn.from_user.id == user.id %}

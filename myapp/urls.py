@@ -36,4 +36,5 @@ urlpatterns = [
     path('accept/<int:connection_id>/', accept_connection_request, name='accept_connection'),
     path('remove/<int:user_id>/', remove_connection, name='remove_connection'),
     path('disconnect/<int:user_id>/', disconnect_connection, name='disconnect_connection'),
+    path('cancel_request/<int:user_id>/', cancel_request, name='cancel_request'),
 ]
