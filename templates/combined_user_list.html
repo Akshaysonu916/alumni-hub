@@ -43,30 +43,32 @@
 
     {% for profile in alumni_profiles %}
       {% if profile.user != request.user %}
-        <div class="user-card alumni relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
-          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
-          <div class="p-6 text-center pointer-events-none">
-            <div class="relative -mt-12 mb-4">
-              {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
-              {% else %}
-                <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
-              {% endif %}
+        <div class="user-card alumni relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+          <a href="{% url 'view_profile' profile.user.id %}" class="block pointer-events-auto">
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-12"></div>
+            <div class="p-6 text-center">
+              <div class="relative -mt-12 mb-4">
+                {% if profile.profile_picture %}
+                  <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
+                {% else %}
+                  <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
+                {% endif %}
+              </div>
+              <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
+              <p class="text-blue-600 font-medium">{{ profile.job_title }}</p>
+              <p class="text-gray-600">{{ profile.company }}</p>
+              <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {{ profile.department }}
+                </span>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                  Class of {{ profile.graduation_year }}
+                </span>
+              </div>
             </div>
-            <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
-            <p class="text-blue-600 font-medium">{{ profile.job_title }}</p>
-            <p class="text-gray-600">{{ profile.company }}</p>
-            <div class="mt-4 pt-4 border-t border-gray-100">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {{ profile.department }}
-              </span>
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                Class of {{ profile.graduation_year }}
-              </span>
-            </div>
-            <div class="mt-4 pointer-events-auto">
-              {% include "connection_buttons.html" with user=profile.user %}
-            </div>
+          </a>
+          <div class="mt-4 px-6 pb-6 pointer-events-auto flex justify-center">
+            {% include "connection_buttons.html" with user=profile.user %}
           </div>
         </div>
       {% endif %}
@@ -74,26 +76,28 @@
 
     {% for profile in student_profiles %}
       {% if profile.user != request.user %}
-        <div class="user-card student relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl cursor-pointer">
-          <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
-          <div class="p-6 text-center pointer-events-none">
-            <div class="relative -mt-12 mb-4">
-              {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
-              {% else %}
-                <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
-              {% endif %}
+        <div class="user-card student relative bg-white rounded-xl shadow-md overflow-hidden transition duration-300 hover:shadow-xl">
+          <a href="{% url 'view_profile' profile.user.id %}" class="block pointer-events-auto">
+            <div class="bg-gradient-to-r from-green-500 to-teal-600 h-12"></div>
+            <div class="p-6 text-center">
+              <div class="relative -mt-12 mb-4">
+                {% if profile.profile_picture %}
+                  <img src="{{ profile.profile_picture.url }}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Profile Image">
+                {% else %}
+                  <img src="{% static 'default_profile.png' %}" class="w-24 h-24 rounded-full mx-auto border-4 border-white object-cover" alt="Default">
+                {% endif %}
+              </div>
+              <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
+              <p class="text-green-600 font-medium">{{ profile.major }}</p>
+              <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  Enrolled {{ profile.enrollment_year }}
+                </span>
+              </div>
             </div>
-            <h3 class="text-xl font-bold text-gray-800">{{ profile.user.username }}</h3>
-            <p class="text-green-600 font-medium">{{ profile.major }}</p>
-            <div class="mt-4 pt-4 border-t border-gray-100">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                Enrolled {{ profile.enrollment_year }}
-              </span>
-            </div>
-            <div class="mt-4 pointer-events-auto">
-              {% include "connection_buttons.html" with user=profile.user %}
-            </div>
+          </a>
+          <div class="mt-4 px-6 pb-6 pointer-events-auto flex justify-center">
+            {% include "connection_buttons.html" with user=profile.user %}
           </div>
         </div>
       {% endif %}
