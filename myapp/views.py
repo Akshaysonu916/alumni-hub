@@ -4,17 +4,35 @@ from .models import *
 from django.contrib.auth.decorators import login_required ,user_passes_test
 from django.contrib import messages
 from django.contrib.auth import logout,login,authenticate,get_user_model
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden,HttpResponseRedirect
 from django.db.models import Q
 from django.http import JsonResponse
+from django.urls import reverse
 
 
 # Create your views here.
 
-def is_alumni(user):
-    return user.is_authenticated and user.profile.user_type == 'alumni'
+# def is_alumni(user):
+#     return user.is_authenticated and user.profile.user_type == 'alumni'
 
-@user_passes_test(is_alumni)
+def post_job(request):
+    if request.method == 'POST':
+        # Your job posting logic...
+
+        # Notify all users except the poster
+        users_to_notify = User.objects.exclude(id=request.user.id).filter(user_type__in=['student', 'alumni'])
+
+        users_to_notify = User.objects.exclude(id=request.user.id)
+
+        for user in users_to_notify:
+            Notification.objects.create(
+                user=user,
+                message=f"{request.user.username} posted a new job."
+            )
+
+        return redirect('job_list')  # or wherever you go after posting
+
+# @user_passes_test(is_alumni)
 @login_required(login_url='signin')
 def add_job(request):
     if request.method == 'POST':
@@ -23,11 +41,54 @@ def add_job(request):
             job = form.save(commit=False)
             job.posted_by = request.user
             job.save()
-            return redirect('jobpost_list')  # Change this to your actual job listing view name
+
+            # Notify all users except the poster
+            users_to_notify = User.objects.exclude(id=request.user.id)
+            for user in users_to_notify:
+                Notification.objects.create(
+                    user=user,
+                    message=f"{request.user.username} posted a new job: {job.job_name}",
+                    job=job
+                )
+            return redirect('jobpost_list')
     else:
         form = JobPostForm()
     return render(request, 'addjobs.html', {'form': form})
 
+
+@login_required
+def my_notifications(request):
+    notifications = request.user.notifications.order_by('-created_at')
+    return render(request, 'notification.html', {'notifications': notifications})
+
+
+def notifications_view(request):
+    notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    
+    # Mark notifications as read
+    notifications.update(is_read=True)
+    
+    notification_count = Notification.objects.filter(user=request.user, is_read=False).count()
+    
+    return render(request, 'notifications.html', {
+        'notifications': notifications,
+        'notification_count': notification_count
+    })
+
+def delete_notification(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    if notification.user == request.user:
+        notification.delete()
+    return HttpResponseRedirect(reverse('my_notifications'))  # ✅ correct usag
+
+
+def some_view(request):
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    notification_count = notifications.count()
+    return render(request, 'notifications.html', {
+        'notifications': notifications,
+        'notification_count': notification_count,
+    })
 
 def signup_view(request):
     if request.method == "POST":
@@ -40,11 +101,6 @@ def signup_view(request):
     else:
         form = SignUpForm()
     return render(request, "signup.html", {"form": form})
-
-
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.shortcuts import redirect, render
 
 def signin_view(request):
     if request.method == 'POST':
@@ -86,16 +142,24 @@ def logout_view(request):
 #job posts all operations
 @login_required(login_url='signin')
 def jobpost_list(request):
-    query = request.GET.get("q")  # Get the search query from URL if it exists
-
+    query = request.GET.get("q")
     if query:
-        jobs = JobPost.objects.filter(
-            Q(job_name__icontains=query) 
-        )
+        jobs = JobPost.objects.filter(Q(job_name__icontains=query))
     else:
-        jobs = JobPost.objects.all()  # No search, return all jobs
-
+        jobs = JobPost.objects.all()
     return render(request, 'jobpost_list.html', {'jobs': jobs})
+    JobNotification.objects.create(recipient=user, message="New job posted!")
+    jobposts = JobPost.objects.all().order_by('-created_at')
+    unread_count = 0
+    if hasattr(request.user, 'student_profile'):
+        unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True, read_at=timezone.now())
+
+    return render(request, 'jobpost_list.html', {
+        'jobposts': jobposts,
+        'unread_notifications_count': unread_count
+    })
+
 
 def userjobs_view(request):
     jobs = JobPost.objects.all()
@@ -358,3 +422,14 @@ def view_profile(request, user_id):
         'profile': profile,
         'profile_type': profile_type
     })
+
+
+@login_required
+def my_notifications(request):
+    # Get notifications in newest-first order
+    notifications = request.user.notifications.order_by('-created_at')
+
+    # Mark all unread notifications as read
+    request.user.notifications.filter(is_read=False).update(is_read=True)
+
+    return render(request, 'notification.html', {'notifications': notifications})

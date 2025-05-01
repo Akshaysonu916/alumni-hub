@@ -30,5 +30,7 @@ urlpatterns = [
     path('students/<str:username>/',student_detail, name='student_detail'),
     path('users/', combined_user_list, name='combined_user_list'),
     path('profile/<int:user_id>/',view_profile, name='view_profile'),
+    path('notifications/', my_notifications, name='my_notifications'),
+    path('delete-notification/<int:notification_id>/',delete_notification, name='delete_notification'),
 
 ]

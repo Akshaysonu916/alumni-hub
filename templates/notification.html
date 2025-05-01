@@ -1,0 +1,31 @@
+{% extends 'home.html' %}
+
+{% block content %}
+{% include "navbar.html" %}
+
+<div class="max-w-3xl mx-auto mt-10 px-4">
+    <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">New Job Notifications</h2>
+
+    {% if notifications %}
+        <ul class="space-y-6">
+            {% for note in notifications %}
+                <li class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-lg font-semibold text-yellow-500">General Notification</div>
+                    <p class="text-gray-700 mt-2 text-sm">
+                        {{ note.posted_by.username }}{{ note.message|truncatechars:100 }}
+                    </p>
+                    <div class="mt-2 text-right">
+                        <!-- Delete Link -->
+                        <a href="{% url 'delete_notification' note.id %}" class="text-red-500 hover:text-red-700">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="text-center text-gray-600 bg-yellow-50 border border-yellow-200 rounded-xl p-6 mt-6">
+            <p class="text-lg font-medium">No job notifications yet.</p>
+            <p class="text-sm mt-2">Stay tuned! New job posts will appear here when available.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

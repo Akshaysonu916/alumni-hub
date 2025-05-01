@@ -52,6 +52,16 @@ class JobPost(models.Model):
         return self.job_name
     
 
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    job = models.ForeignKey('JobPost', on_delete=models.CASCADE, null=True, blank=True)  # New!
+
+    def _str_(self):
+        return f"To {self.user.username}: {self.message[:50]}"
+
 class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Track who uploaded the photo
     title = models.CharField(max_length=100, blank=True, null=True)
