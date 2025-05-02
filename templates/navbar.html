@@ -327,9 +327,10 @@
               {% endif %}
             </a> 
             <a href="{% url 'add_jobs' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Add Jobs</a>
+            <a href="{% url 'combined_user_list' %}" class="nav-link"><i class="fas fa-users"></i> Connect</a>
             <a href="{% url 'jobpost_list' %}" class="nav-link"><i class="fas fa-briefcase"></i> Jobs</a>
             <a href="{% url 'photo_gallery' %}" class="nav-link"><i class="fas fa-images"></i> Gallery</a>
-  
+            
             <!-- Alumni Profile Dropdown -->
             <div class="profile-container">
               <button id="profile-btn" class="profile-button">
@@ -364,8 +365,10 @@
                 <span class="notification-badge">{{ unread_notifications_count }}</span>
               {% endif %}
             </a>
+            <a href="{% url 'combined_user_list' %}" class="nav-link"><i class="fas fa-users"></i> Connect</a>
             <a href="{% url 'jobpost_list' %}" class="nav-link"><i class="fas fa-briefcase"></i> Jobs</a>
             <a href="{% url 'photo_gallery' %}" class="nav-link"><i class="fas fa-images"></i> Gallery</a>
+
   
             <!-- Student Profile Dropdown -->
             <div class="profile-container">

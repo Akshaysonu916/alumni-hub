@@ -1,0 +1,13 @@
+{% extends "home.html" %}
+{% block content %}
+<section class="py-10 px-4">
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-4">{{ alumni.user.username }}'s Profile</h2>
+        <p><strong>Email:</strong> {{ alumni.user.email }}</p>
+        <p><strong>Department:</strong> {{ alumni.department }}</p>
+        <p><strong>Passout Year:</strong> {{ alumni.passout_year }}</p>
+        <!-- Add more fields as needed -->
+        <a href="{% url 'admin_alumni_list' %}" class="text-blue-600 hover:underline mt-4 inline-block">← Back to list</a>
+    </div>
+</section>
+{% endblock %}

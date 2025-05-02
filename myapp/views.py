@@ -389,10 +389,41 @@ def admin_alumni_list(request):
     return render(request, 'alumni_list.html', {'alumni': alumni})
 
 @user_passes_test(is_admin)
+def view_alumni_profile(request, alumni_id):
+    alumni = get_object_or_404(AlumniProfile, id=alumni_id)
+    return render(request, 'adminalumni_profile.html', {'alumni': alumni})
+
+@user_passes_test(is_admin)
+def delete_alumni(request, alumni_id):
+    alumni = get_object_or_404(AlumniProfile, id=alumni_id)
+    if request.method == 'POST':
+        alumni.user.delete()  # Deletes both Alumni and linked User if related via OneToOneField
+        # messages.success(request, "Alumni deleted successfully.")
+        return redirect('admin_alumni_list')  # Replace with your actual alumni list view name
+    return redirect('admin_alumni_list')
+
+
+@user_passes_test(is_admin)
 @login_required(login_url='signin')
 def admin_student_list(request):
     students = StudentProfile.objects.all()
     return render(request, 'student_list.html', {'students': students})
+
+@user_passes_test(is_admin)
+def view_student_profile(request, student_id):
+    student = get_object_or_404(StudentProfile, id=student_id)
+    return render(request, 'adminstudent_profile.html', {'student': student})
+
+@user_passes_test(is_admin)
+def delete_student(request, student_id):
+    student = get_object_or_404(StudentProfile, id=student_id)
+    if request.method == 'GET':
+        user = student.user
+        student.delete()
+        user.delete()
+        # messages.success(request, 'Student deleted successfully.')
+    return redirect('admin_student_list')  # replace with your actual student list URL name
+
 
 @login_required(login_url='signin')
 def admin_job_list(request):
