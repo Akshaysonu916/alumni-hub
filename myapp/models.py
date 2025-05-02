@@ -37,31 +37,42 @@ class StudentProfile(models.Model):
         return f"{self.user.username} - {self.major}"
 
 class JobPost(models.Model):
-    job_name = models.CharField(max_length=100,default="Unnamed Job")
+    job_name = models.CharField(max_length=255)
     company = models.CharField(max_length=255)
-    description = models.TextField(blank=True)  # Changed to TextField
-    job_type = models.CharField(
-        max_length=100,
-        choices=[("FT", "Full-Time"), ("PT", "Part-Time"),("IS", "Intern-Ship"),("RT", "Remote-Job")],
-        default=4  # Added default value
-    )
-    company_website = models.URLField(blank=True, null=True)  # New field for company site link
-    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')
+    description = models.TextField()
+    job_type = models.CharField(max_length=20, choices=(
+        ('FT', 'Full-Time'),
+        ('PT', 'Part-Time'),
+        ('IS', 'Internship'),
+        ('RT', 'Remote-Job'),
+    ))
+    company_website = models.URLField(blank=True, null=True)
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')  # ✅ Important
 
-    def __str__(self):
+    def _str_(self):
         return self.job_name
     
 
 class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    TYPE_CHOICES = [
+        ('job', 'Job Post'),
+        ('connection', 'Connection Request'),
+        ('connection_accepted', 'Connection Accepted'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')  # recipient
+    from_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_notifications')  # sender
+    message = models.CharField(max_length=255)
     is_read = models.BooleanField(default=False)
-    job = models.ForeignKey('JobPost', on_delete=models.CASCADE, null=True, blank=True)  # New!
+    read_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    notification_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='job')
+
+
 
     def _str_(self):
-        return f"To {self.user.username}: {self.message[:50]}"
-
+        return f"Notification for {self.notification_type} - {self.message}"
+ 
 class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Track who uploaded the photo
     title = models.CharField(max_length=100, blank=True, null=True)

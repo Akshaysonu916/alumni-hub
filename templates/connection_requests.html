@@ -1,0 +1,21 @@
+{% extends "home.html" %}
+
+{% block content %}
+  <h2>Connection Requests</h2>
+
+  {% if connection_requests %}
+    <ul>
+      {% for conn in connection_requests %}
+        <li>
+          {{ conn.from_user.username }}
+          <form method="post" action="{% url 'accept_connection' conn.id %}">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No connection requests.</p>
+  {% endif %}
+{% endblock %}

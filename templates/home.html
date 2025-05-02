@@ -26,6 +26,8 @@
 <body class="bg-gray-900">
     {% block content %}
     {% include "navbar.html" %}
+    {% for notification in connection_notifications %}
+    {% endfor %}
 
     <!-- Hero Section with Background Video -->
     <div class="relative flex items-center justify-center h-screen bg-gray-900">
@@ -42,6 +44,7 @@
                 style="animation: slideIn 1.2s ease-out forwards 0.5s;">
                 Stay connected, explore jobs, and grow your network.
             </p>
+            
 
             <div class="mt-6 flex justify-center space-x-4">
                 <a href="{% url 'combined_user_list' %}" 
@@ -68,7 +71,11 @@
             Your browser does not support the video tag.
         </video>
     </div>
-
+    <!-- Footer -->
+  <footer class="bg-gray-900 text-white text-center py-4">
+    <p>&copy; 2025 Alumni Hub. All Rights Reserved.</p>
+  </footer>
+    
     {% endblock content %}
 </body>
 </html>

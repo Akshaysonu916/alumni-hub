@@ -8,87 +8,87 @@ from django.http import HttpResponseForbidden,HttpResponseRedirect
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
+from .models import Connection, User
+from datetime import datetime
 
 
 # Create your views here.
 
 # def is_alumni(user):
-#     return user.is_authenticated and user.profile.user_type == 'alumni'
+    #  return user.is_authenticated and user.profile.user_type == 'alumni'
 
-def post_job(request):
-    if request.method == 'POST':
-        # Your job posting logic...
-
-        # Notify all users except the poster
-        users_to_notify = User.objects.exclude(id=request.user.id).filter(user_type__in=['student', 'alumni'])
-
-        users_to_notify = User.objects.exclude(id=request.user.id)
-
-        for user in users_to_notify:
-            Notification.objects.create(
-                user=user,
-                message=f"{request.user.username} posted a new job."
-            )
-
-        return redirect('job_list')  # or wherever you go after posting
 
 # @user_passes_test(is_alumni)
+
 @login_required(login_url='signin')
 def add_job(request):
     if request.method == 'POST':
         form = JobPostForm(request.POST)
         if form.is_valid():
             job = form.save(commit=False)
-            job.posted_by = request.user
+            job.posted_by = request.user  # ✅ Track who posted the job
             job.save()
 
-            # Notify all users except the poster
+            # ✅ Notify all users EXCEPT the one who posted the job
             users_to_notify = User.objects.exclude(id=request.user.id)
+
             for user in users_to_notify:
                 Notification.objects.create(
                     user=user,
                     message=f"{request.user.username} posted a new job: {job.job_name}",
-                    job=job
+                    notification_type='job'
                 )
-            return redirect('jobpost_list')
+
+            return redirect('jobpost_list')  # ✅ Redirect to job list page
     else:
         form = JobPostForm()
-    return render(request, 'addjobs.html', {'form': form})
+
+    # 🔔 Connection request notifications for header/navbar
+    connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    count = connection_notifications.count()
+
+    return render(request, 'addjobs.html', {
+        'form': form,
+        'connection_notifications': connection_notifications,
+        'count': count,
+    })
+
+@login_required
+def notifications_view(request):
+    # Get all notifications for the user
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+
+    # Mark all as read
+    notifications.update(is_read=True, read_at=timezone.now())
+
+    return render(request, 'notification.html', {
+        'notifications': notifications,
+        'notification_count': 0  # Already marked as read
+    })
 
 
 @login_required
 def my_notifications(request):
+    # Show all notifications, grouped by type if desired
     notifications = request.user.notifications.order_by('-created_at')
     return render(request, 'notification.html', {'notifications': notifications})
 
 
-def notifications_view(request):
-    notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
-    
-    # Mark notifications as read
-    notifications.update(is_read=True)
-    
-    notification_count = Notification.objects.filter(user=request.user, is_read=False).count()
-    
-    return render(request, 'notifications.html', {
-        'notifications': notifications,
-        'notification_count': notification_count
-    })
-
+@login_required
 def delete_notification(request, notification_id):
-    notification = Notification.objects.get(id=notification_id)
-    if notification.user == request.user:
-        notification.delete()
-    return HttpResponseRedirect(reverse('my_notifications'))  # ✅ correct usag
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    notification.delete()
+    return HttpResponseRedirect(reverse('my_notifications'))
 
 
-def some_view(request):
-    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
-    notification_count = notifications.count()
-    return render(request, 'notifications.html', {
-        'notifications': notifications,
-        'notification_count': notification_count,
-    })
+@login_required
+def mark_as_read(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    notification.is_read = True
+    notification.read_at = timezone.now()
+    notification.save()
+    return HttpResponseRedirect(reverse('my_notifications'))
+
 
 def signup_view(request):
     if request.method == "POST":
@@ -128,8 +128,24 @@ def signin_view(request):
     return render(request, 'signin.html')
 
 
+
+
 def home_view(request):
-    return render(request,'home.html',{'user':request.user})
+    connection_notifications = Connection.objects.none()  # default to empty QuerySet
+
+    if request.user.is_authenticated:
+        connection_notifications = Connection.objects.filter(
+            to_user=request.user,
+            is_accepted=False
+        )
+    
+    context = {
+        'connection_notifications': connection_notifications,
+        'unread_notifications_exist': connection_notifications.exists(),  # ✅ Fixed: now safe
+        # other context variables...
+    }
+    return render(request, 'home.html', context)
+
 
 
 def logout_view(request):
@@ -143,23 +159,29 @@ def logout_view(request):
 @login_required(login_url='signin')
 def jobpost_list(request):
     query = request.GET.get("q")
+
+    # 🔎 Job filtering based on the search query
     if query:
         jobs = JobPost.objects.filter(Q(job_name__icontains=query))
     else:
         jobs = JobPost.objects.all()
-    return render(request, 'jobpost_list.html', {'jobs': jobs})
-    JobNotification.objects.create(recipient=user, message="New job posted!")
-    jobposts = JobPost.objects.all().order_by('-created_at')
+
+    # 🔔 Connection notifications
+    connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    connection_count = connection_notifications.count()
+
+    # 📩 Unread general notifications (for students only)
     unread_count = 0
     if hasattr(request.user, 'student_profile'):
         unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
         Notification.objects.filter(user=request.user, is_read=False).update(is_read=True, read_at=timezone.now())
 
     return render(request, 'jobpost_list.html', {
-        'jobposts': jobposts,
-        'unread_notifications_count': unread_count
+        'jobs': jobs,
+        'connection_notifications': connection_notifications,
+        'count': connection_count,
+        'unread_notifications_count': unread_count,
     })
-
 
 def userjobs_view(request):
     jobs = JobPost.objects.all()
@@ -202,8 +224,18 @@ def delete_jobpost(request, job_id):
 # View to display the photo gallery
 @login_required(login_url='signin')
 def photo_gallery(request):
-    photos = Photo.objects.all().order_by('-upload_date')  # Fetch all photos, ordered by upload date
-    return render(request, 'photo_gallery.html', {'photos': photos})
+    photos = Photo.objects.all().order_by('-upload_date')  # Ordered by upload date
+
+    # 🔔 Connection notifications
+    connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    connection_count = connection_notifications.count()
+
+    return render(request, 'photo_gallery.html', {
+        'photos': photos,
+        'connection_notifications': connection_notifications,
+        'count': connection_count,
+    })
+
 
 # View to handle photo uploads
 def upload_photo(request):
@@ -269,22 +301,34 @@ def delete_photo(request, id):
 def profile_view(request):
     """Display the profile of the logged-in user based on their role."""
     try:
+        # Try to fetch the profile based on the user's role
         if hasattr(request.user, 'alumni_profile'):
             profile = request.user.alumni_profile
-            template = "alumni_profile.html"
+            template = "alumni_profile.html"  # Template for alumni profile
         elif hasattr(request.user, 'student_profile'):
             profile = request.user.student_profile
-            template = "student_profile.html"
+            template = "student_profile.html"  # Template for student profile
         else:
-            return redirect("edit_profile")  # Redirect to profile edit if no profile exists
+            # Redirect to edit profile if no profile exists
+            return redirect("edit_profile")
 
-        return render(request, template, {"profile": profile})
+        # Get the unread connection notifications
+        connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+        connection_count = connection_notifications.count()
+
+        # Render the appropriate template with the context
+        return render(request, template, {
+            "profile": profile,
+            "connection_notifications": connection_notifications,
+            "count": connection_count,
+        })
 
     except Exception as e:
+        # Handle any unexpected errors and redirect to profile edit
         print(f"Error loading profile: {e}")
-        return redirect("edit_profile")  # Handle missing profiles gracefully
-
-
+        return redirect("edit_profile")
+    
+    
 @login_required
 def edit_profile_view(request):
     user = request.user
@@ -388,6 +432,7 @@ def student_detail(request, username):
 
 
 @login_required(login_url='signin')
+# Adjust as per your app structure
 def combined_user_list(request):
     current_user = request.user
 
@@ -412,6 +457,9 @@ def combined_user_list(request):
 
     # Store the received connections for easy lookup
     received_connections = {conn.from_user.id: conn for conn in received_requests}
+    connection_notifications = received_connections
+    connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    count = connection_notifications.count()
 
     return render(request, 'combined_user_list.html', {
         'alumni_profiles': alumni_profiles,
@@ -419,8 +467,14 @@ def combined_user_list(request):
         'sent_requests': sent_ids,
         'received_requests': received_ids,
         'connected_ids': connected_ids,
-        'received_connections': received_connections,  # Pass connections for accepting
+        'received_connections': received_connections,
+        'connection_notifications': connection_notifications,
+        'count': count # Pass connections for accepting
     })
+
+
+
+
 
 
 def view_profile(request, user_id):
@@ -461,22 +515,48 @@ def my_notifications(request):
 
 @login_required
 def send_connection_request(request, user_id):
-    target_user = User.objects.get(id=user_id)
+    target_user = get_object_or_404(User, id=user_id)
+    from_user = request.user
+
     if request.method == 'POST':
-        Connection.objects.create(from_user=request.user, to_user=target_user)
-    return redirect('combined_user_list')
+        # Prevent self-connections and duplicate requests
+        if from_user != target_user and not Connection.objects.filter(from_user=from_user, to_user=target_user).exists():
+            # Create connection request
+            Connection.objects.create(from_user=from_user, to_user=target_user, is_accepted=False)
+
+            # Create connection notification
+            Notification.objects.create(
+                user=target_user,
+                message=f"{from_user.username} sent you a connection request.",
+                notification_type='connection'
+            )
+
+    # return redirect('student_profile', user_id=user_id)
+
+    # return redirect('some_view')
+
+    return redirect('combined_user_list')  # 🔄 Update if needed to your actual view name
 
 @login_required
 def accept_connection_request(request, connection_id):
-    # Get the connection object using the connection_id from the URL
-    connection = get_object_or_404(Connection, id=connection_id, to_user=request.user, is_accepted=False)
+    # Fetch the connection request
+    connection = get_object_or_404(Connection, id=connection_id, to_user=request.user)
 
-    # Update the connection request to accepted
-    connection.is_accepted = True
-    connection.save()
+    # If the connection is not already accepted
+    if not connection.is_accepted:
+        connection.is_accepted = True  # Mark as accepted
+        connection.save()
 
-    # Redirect after accepting
-    return redirect('combined_user_list')  # or any other page you want
+        # Notify the sender that their request was accepted
+        Notification.objects.create(
+            user=connection.from_user,  # The receiver of the notification (the sender of the request)
+            message=f"{request.user.username} has accepted your connection request.",  # Message content
+            notification_type='connection_accepted'  # Type set to 'connection_accepted'
+        )
+
+    # Redirect to the combined user list or other page after accepting the request
+    return redirect('combined_user_list')  # 🔁 Replace with your actual redirect view name
+
 
 @login_required
 def remove_connection(request, user_id):
@@ -505,15 +585,50 @@ def disconnect_connection(request, user_id):
     connection.save()
 
     # Optionally, add a success message
-    messages.success(request, "You have successfully disconnected.")
+    # messages.success(request, "You have successfully disconnected.")
 
     # Redirect to the users page or wherever you need
     return redirect('combined_user_list')
 
-
+@login_required
 def cancel_request(request, user_id):
     to_user = get_object_or_404(User, id=user_id)
     connection = Connection.objects.filter(from_user=request.user, to_user=to_user, is_accepted=False).first()
     if connection:
         connection.delete()
     return redirect('combined_user_list')  # or your actual user list view name
+
+# @login_required
+# def mark_notifications_as_read(request):
+#     # Mark all notifications for the user as read
+#     request.user.notifications.filter(is_read=False).update(is_read=True)
+#     return redirect('combined_user_list')  # Or any other redirect
+
+# def base_context(request):
+#     job_notifications = request.user.notifications.filter(type='job', is_read=False)
+#     connection_notifications = request.user.notifications.filter(type='connection', is_read=False)
+    
+#     return {
+#         'job_notifications': job_notifications,
+#         'connection_notifications': connection_notifications,
+#     }
+@login_required
+def connect_requests(request):
+    connection_requests = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    return render(request, 'connect_requests.html', {'connection_requests': connection_requests})
+
+def student_profile(request, user_id):
+    profile_user = get_object_or_404(User, id=user_id)
+
+    # Include connection notifications if the user is authenticated
+    connection_notifications = []
+    if request.user.is_authenticated:
+        connection_notifications = Connection.objects.filter(
+            to_user=request.user,
+            is_accepted=False
+        )
+
+    return render(request, 'student_profile.html', {
+        'profile_user': profile_user,
+        'connection_notifications': connection_notifications,
+    })
