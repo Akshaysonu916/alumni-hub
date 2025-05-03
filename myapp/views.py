@@ -204,7 +204,7 @@ def edit_jobpost(request, job_id):
         form = JobPostForm(request.POST, instance=jobpost)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Job post updated successfully.')
+            # messages.success(request, 'Job post updated successfully.')
             return redirect('jobpost_detail', job_id=jobpost.id)
     else:
         form = JobPostForm(instance=jobpost)
@@ -216,7 +216,7 @@ def delete_jobpost(request, job_id):
     jobpost = get_object_or_404(JobPost, id=job_id)
     if request.method == 'POST':
         jobpost.delete()
-        messages.success(request, 'Job post deleted successfully.')
+        # messages.success(request, 'Job post deleted successfully.')
         return redirect('jobpost_list')
     return render(request, 'confirm_delete.html', {'jobpost': jobpost})
 
@@ -245,7 +245,7 @@ def upload_photo(request):
             photo = form.save(commit=False)  # Don't save to DB yet
             photo.user = request.user         # Assign logged-in user
             photo.save()                      # Now save to DB
-            messages.success(request, "Photo uploaded successfully!")
+            # messages.success(request, "Photo uploaded successfully!")
             return redirect('photo_gallery')
     else:
         form = PhotoForm()
@@ -272,7 +272,7 @@ def edit_photo(request, id):
         form = PhotoForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
             form.save()
-            messages.success(request, "Photo updated successfully!")
+            # messages.success(request, "Photo updated successfully!")
             return redirect('photo_detail', id=photo.id)
     else:
         form = PhotoForm(instance=photo)
@@ -291,7 +291,7 @@ def delete_photo(request, id):
 
     if request.method == 'POST':
         photo.delete()
-        messages.success(request, "Photo deleted successfully!")
+        # messages.success(request, "Photo deleted successfully!")
         return redirect('photo_gallery')
 
     return render(request, 'delete_photo.html', {'photo': photo})
@@ -328,36 +328,55 @@ def profile_view(request):
         print(f"Error loading profile: {e}")
         return redirect("edit_profile")
     
-    
-@login_required
+@login_required    
 def edit_profile_view(request):
     user = request.user
 
+    # Determine profile and form class
     if hasattr(user, 'is_alumni') and user.is_alumni:
         profile, created = AlumniProfile.objects.get_or_create(user=user)
         form_class = AlumniProfileForm
     elif hasattr(user, 'is_student') and user.is_student:
-        # Provide defaults for required fields
         profile, created = StudentProfile.objects.get_or_create(
             user=user,
             defaults={
-                'enrollment_year': 2020,  # 👈 You can customize this
-                # 'graduation_year': 2024,  # 👈 Or calculate from current year
+                'enrollment_year': 2020,
             }
         )
         form_class = StudentProfileForm
     else:
         return HttpResponseForbidden("Invalid user type or missing profile.")
 
+    # Handle POST
     if request.method == "POST":
-        form = form_class(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect("profile")
+        if 'add_skill' in request.POST:
+            # Handle skill addition
+            skill_form = SkillForm(request.POST)
+            form = form_class(instance=profile)  # Retain profile form
+            if skill_form.is_valid():
+                skill = skill_form.save(commit=False)
+                skill.alumni = user
+                skill.save()
+                return redirect("edit_profile")
+        else:
+            # Handle profile update
+            form = form_class(request.POST, request.FILES, instance=profile)
+            skill_form = SkillForm()
+            if form.is_valid():
+                form.save()
+                return redirect("profile")
     else:
         form = form_class(instance=profile)
+        skill_form = SkillForm()
 
-    return render(request, "edit_profile.html", {"form": form})
+    # Fetch existing skills
+    skills = Skill.objects.filter(alumni=user)
+
+    return render(request, "edit_profile.html", {
+        "form": form,
+        "skill_form": skill_form,
+        "skills": skills,
+    })
 
 
 
@@ -663,3 +682,40 @@ def student_profile(request, user_id):
         'profile_user': profile_user,
         'connection_notifications': connection_notifications,
     })
+
+
+def edit_profile(request):
+    if request.method == 'POST':
+        skill_form = SkillForm(request.POST)
+        if skill_form.is_valid():
+            skill = skill_form.save(commit=False)
+            skill.alumni = request.user
+            skill.save()
+            return redirect('edit_profile')  # or 'profile' depending on your flow
+    else:
+        skill_form = SkillForm()
+
+    skills = Skill.objects.filter(alumni=request.user)
+    return render(request, 'edit_profile.html', {
+        'skill_form': skill_form,
+        'skills': skills,
+    })
+
+def delete_skill(request, skill_id):
+    skill = get_object_or_404(Skill, id=skill_id, alumni=request.user)
+    skill.delete()
+    return redirect('edit_profile')
+
+# Edit Skill
+def edit_skill(request, skill_id):
+    skill = get_object_or_404(Skill, id=skill_id, alumni=request.user)
+
+    if request.method == "POST":
+        form = SkillForm(request.POST, instance=skill)
+        if form.is_valid():
+            form.save()
+            return redirect('edit_profile')
+    else:
+        form = SkillForm(instance=skill)
+
+    return render(request, "edit_skill.html", {"form": form, "skill": skill})

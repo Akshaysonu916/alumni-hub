@@ -106,3 +106,10 @@ class Connection(models.Model):
 #     def __str__(self):
 #         return f"Message from {self.sender.username} to {self.receiver.username}"
 
+class Skill(models.Model):
+    alumni = models.ForeignKey(User, on_delete=models.CASCADE, related_name='skills')
+    name = models.CharField(max_length=100)
+    proficiency = models.PositiveIntegerField()  # Percentage 0–100
+
+    def _str_(self):
+        return f"{self.name} ({self.proficiency}%)"

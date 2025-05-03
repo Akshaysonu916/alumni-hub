@@ -14,13 +14,35 @@
                 <p class="text-gray-600">Graduation Year: {{ profile.graduation_year }}</p>
                 <p><a href="{{ profile.linkedin }}" class="text-blue-500">LinkedIn</a></p>
                 <p class="text-gray-600">Department: {{ profile.department }}</p>
-                
             </div>
         </div>
-        <div class="mt-4">
+
+        <div class="mt-4 space-x-2">
             <a href="{% url 'edit_profile' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md">Edit Profile</a>
             <a href="{% url 'signout' %}" class="bg-red-600 text-white px-4 py-2 rounded-md">Sign Out</a>
         </div>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="bg-white shadow-lg rounded-lg p-6 mt-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Skills</h3>
+        {% if profile.user.skills.all %}
+            <div class="space-y-4">
+                {% for skill in profile.user.skills.all %}
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-700 font-medium">{{ skill.name }}</span>
+                            <span class="text-gray-500">{{ skill.proficiency }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="bg-green-500 h-4 rounded-full" style="width: {{ skill.proficiency }}%;"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">No skills added yet.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -96,3 +96,13 @@ class StudentProfileForm(forms.ModelForm):
     class Meta:
         model = StudentProfile
         fields = ["enrollment_year", "major", "resume",'profile_picture']
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ['name', 'proficiency']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Skill name'}),
+            'proficiency': forms.NumberInput(attrs={'min': 0, 'max': 100}),
+        }

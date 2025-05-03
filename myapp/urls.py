@@ -48,4 +48,7 @@ urlpatterns = [
     path('my-notifications/', my_notifications, name='my_notifications'),
     path('notifications/delete/<int:notification_id>/', delete_notification, name='delete_notification'),
     path('notifications/read/<int:notification_id>/', mark_as_read, name='mark_as_read'),
+    path("edit-profile/",edit_profile_view, name="edit_profile"),
+    path("skill/<int:skill_id>/delete/",delete_skill, name="delete_skill"),
+    path("skill/<int:skill_id>/edit/",edit_skill, name="edit_skill"),
 ]
