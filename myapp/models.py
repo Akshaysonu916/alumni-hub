@@ -48,6 +48,7 @@ class JobPost(models.Model):
     ))
     company_website = models.URLField(blank=True, null=True)
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')  # ✅ Important
+    salary = models.CharField(max_length=100, blank=True, null=True)
 
     def _str_(self):
         return self.job_name

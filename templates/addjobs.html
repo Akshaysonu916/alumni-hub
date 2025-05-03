@@ -56,6 +56,14 @@
                         placeholder="Enter company website (if available)">
                 </div>
 
+                <!-- Salary -->
+                <div>
+                    <label for="{{ form.salary.id_for_label }}" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Salary</label>
+                    <input type="text" name="{{ form.salary.name }}" id="{{ form.salary.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+                        placeholder="e.g. ₹40,000/month or Negotiable">
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" class="w-full text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all duration-300 shadow-md">
                     Add Job Post

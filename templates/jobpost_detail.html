@@ -14,6 +14,13 @@
             <span class="text-gray-800 dark:text-gray-200 font-semibold">Company:</span> {{ job.company }}
         </p>
 
+        <!-- Salary -->
+        {% if job.salary %}
+        <p class="mt-2 text-lg font-medium text-gray-600 dark:text-gray-300">
+            <span class="text-gray-800 dark:text-gray-200 font-semibold">Salary:</span> {{ job.salary }}
+        </p>
+        {% endif %}
+
         <!-- Job Description -->
         <p class="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed">
             {{ job.description }}
