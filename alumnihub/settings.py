@@ -12,6 +12,16 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',  # Custom class for debug messages
+    messages.INFO: 'alert-info',    # Bootstrap info color
+    messages.SUCCESS: 'alert-success',  # Bootstrap success color
+    messages.WARNING: 'alert-warning',  # Bootstrap warning color
+    messages.ERROR: 'alert-danger',  # Bootstrap danger color
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +42,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'chat',  # Your chat app
     # Other apps
     'widget_tweaks',
 ]
@@ -71,8 +84,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'alumnihub.wsgi.application'
+ASGI_APPLICATION = 'alumnihub.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
