@@ -51,4 +51,8 @@ urlpatterns = [
     path("edit-profile/",edit_profile_view, name="edit_profile"),
     path("skill/<int:skill_id>/delete/",delete_skill, name="delete_skill"),
     path("skill/<int:skill_id>/edit/",edit_skill, name="edit_skill"),
+    path('aboutus/', about_us, name='about_us'),
+    path('support', support, name='support'),
+    path('privacypolicy/', privacy_policy, name='privacy_policy'),
+    path('termsandconditions/',terms_of_service , name='terms_and_conditions'),
 ]

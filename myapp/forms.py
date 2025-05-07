@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import *
+from django.core.exceptions import ValidationError
 
 # 1. User Registration Form (Common for Students & Alumni)
 class SignUpForm(UserCreationForm):
@@ -17,6 +18,15 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'user_type', 'department', 'passout_year')
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        allowed_domains = ['@gmail.com']  # Only these domains are allowed
+        
+        if not any(email.endswith(domain) for domain in allowed_domains):
+            raise ValidationError("Only emails ending with @gmail.com is allowed.")
+        
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)

@@ -719,3 +719,18 @@ def edit_skill(request, skill_id):
         form = SkillForm(instance=skill)
 
     return render(request, "edit_skill.html", {"form": form, "skill": skill})
+
+
+
+
+def about_us(request):
+    return render(request, 'about_us.html')
+
+def support(request):
+    return render(request, 'support.html')
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')

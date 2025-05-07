@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - Alumni Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            fadeInUp: "fadeInUp 0.6s ease-out",
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%': { opacity: 0, transform: 'translateY(10px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+{%include "navbar.html" %}
+<body class="bg-gradient-to-tr from-blue-50 to-white text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-8 shadow-lg">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-2 animate-fadeInUp">Alumni Hub</h1>
+      <p class="text-lg md:text-xl text-blue-100 animate-fadeInUp">Reconnecting Memories and Building Futures</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <section class="bg-white rounded-3xl shadow-xl p-10 animate-fadeInUp">
+      <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">👥 About Us</h2>
+
+      <p class="mb-4 text-gray-700 leading-relaxed">
+        <strong class="text-blue-700">Welcome to Alumni Hub – Reconnecting Memories and Building Futures</strong>
+      </p>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        Alumni Hub is an initiative dedicated to strengthening the bond between our college and its former students. Our mission is to create a vibrant and supportive alumni community that remains engaged, connected, and involved in shaping the future of our institution.
+      </p>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        This platform is designed to foster lifelong relationships among alumni and students by providing a collaborative space for networking, mentorship, and career opportunities. Whether you're a recent graduate or a long-established professional, Alumni Hub allows you to share experiences, stay informed about college events, and contribute meaningfully to the growth of others.
+      </p>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        With features such as personalized profiles, a real-time chat system, job listings, and event updates, the website encourages active participation and mutual support. It also offers students the opportunity to connect with mentors, explore career paths, and build meaningful relationships with alumni.
+      </p>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        At Alumni Hub, we believe in the power of community — and that every graduate has something valuable to offer. Together, we’re building a legacy of connection, support, and lifelong learning.
+      </p>
+
+      <p class="text-xl text-center font-semibold text-indigo-700">
+        💡 Join us in bridging the past, present, and future — one connection at a time.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-center py-6 mt-10 border-t text-sm text-gray-500">
+    © 2025 Alumni Hub. All rights reserved.
+  </footer>
+
+</body>
+</html>
