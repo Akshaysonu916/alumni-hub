@@ -1,48 +1,109 @@
 {% extends "home.html" %}
 
 {% block content %}
-<div class="container mx-auto p-6">
-    <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Alumni Profile</h2>
-        <div class="flex items-center space-x-6">
-            <img class="w-24 h-24 rounded-full border-2 border-blue-500 shadow-lg" 
-                 src="{{ user.profile.image.url }}" 
-                 alt="Profile Picture">
-            <div>
-                <p class="text-lg font-semibold">{{ profile.user.username }}</p>
-                <p class="text-gray-600">{{ profile.job_title }} at {{ profile.company }}</p>
-                <p class="text-gray-600">Graduation Year: {{ profile.graduation_year }}</p>
-                <p><a href="{{ profile.linkedin }}" class="text-blue-500">LinkedIn</a></p>
-                <p class="text-gray-600">Department: {{ profile.department }}</p>
-            </div>
-        </div>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Profile Card -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+        <div class="p-6 md:p-8">
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <!-- Profile Image -->
+                <div class="relative">
+                    <img 
+                        class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-blue-100 object-cover shadow-md" 
+                        src="{{ user.alumni_profile.profile_picture.url }}" 
+                        alt="Profile Picture"
+                    >
+                    <div class="absolute -bottom-2 -right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        Alumni
+                    </div>
+                </div>
 
-        <div class="mt-4 space-x-2">
-            <a href="{% url 'edit_profile' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md">Edit Profile</a>
-            <a href="{% url 'signout' %}" class="bg-red-600 text-white px-4 py-2 rounded-md">Sign Out</a>
+                <!-- Profile Info -->
+                <div class="flex-1">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">{{ profile.user.username }}</h1>
+                    <p class="text-lg text-blue-600 font-medium mb-2">{{ profile.job_title }} at {{ profile.company }}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-600">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </svg>
+                            Graduated: {{ profile.graduation_year }}
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </svg>
+                            {{ profile.department }}
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
+                            </svg>
+                            <a href="{{ profile.linkedin }}" class="text-blue-500 hover:text-blue-700 transition-colors">LinkedIn Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-wrap gap-3">
+                <a href="{% url 'edit_profile' %}" class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition shadow-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    </svg>
+                    Edit Profile
+                </a>
+                <a href="{% url 'signout' %}" class="inline-flex items-center px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition shadow-sm">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    </svg>
+                    Sign Out
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Skills Section -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mt-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Skills</h3>
-        {% if profile.user.skills.all %}
-            <div class="space-y-4">
-                {% for skill in profile.user.skills.all %}
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-gray-700 font-medium">{{ skill.name }}</span>
-                            <span class="text-gray-500">{{ skill.proficiency }}%</span>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mt-6">
+        <div class="p-6 md:p-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+                Professional Skills
+            </h3>
+
+            {% if profile.user.skills.all %}
+                <div class="space-y-5">
+                    {% for skill in profile.user.skills.all %}
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-800">{{ skill.name }}</span>
+                                <span class="text-sm text-gray-500">{{ skill.proficiency }}% proficiency</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-3">
+                                <div 
+                                    class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full" 
+                                    style="width: {{ skill.proficiency }}%">
+                                </div>
+                            </div>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="bg-green-500 h-4 rounded-full" style="width: {{ skill.proficiency }}%;"></div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p class="text-gray-500">No skills added yet.</p>
-        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-8">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    </svg>
+                    <h4 class="mt-2 text-lg font-medium text-gray-700">No skills added yet</h4>
+                    <p class="mt-1 text-gray-500">Add your professional skills to showcase your expertise</p>
+                    <a href="{% url 'edit_profile' %}" class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                        Add Skills
+                    </a>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

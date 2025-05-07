@@ -1,30 +1,34 @@
-from django.shortcuts import render
-from django.contrib.auth import logout
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-User = get_user_model()
-from .models import Message
 from django.db.models import Q
 from django.utils.timezone import make_aware
 import datetime
+from .models import Message
 
-
-# Create your views here.
+User = get_user_model()
 
 @login_required
 def chat_room(request, room_name):
     search_query = request.GET.get('search', '') 
-    users = User.objects.exclude(id=request.user.id) 
 
+    # Exclude the current user correctly
+    users = User.objects.exclude(username=request.user.username)
+
+    # Get the user object corresponding to the room_name (username)
+    chat_user = get_object_or_404(User, username=room_name)
+
+    # Filter chat messages between the current user and the selected user
     chats = Message.objects.filter(
-        (Q(sender=request.user) & Q(receiver__username=room_name)) |
-        (Q(receiver=request.user) & Q(sender__username=room_name))
+        (Q(sender=request.user) & Q(receiver=chat_user)) |
+        (Q(receiver=request.user) & Q(sender=chat_user))
     )
 
     if search_query:
         chats = chats.filter(Q(content__icontains=search_query))  
 
     chats = chats.order_by('timestamp') 
+
     user_last_messages = []
 
     for user in users:

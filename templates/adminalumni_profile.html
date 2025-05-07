@@ -1,13 +1,34 @@
 {% extends "home.html" %}
 {% block content %}
 <section class="py-10 px-4">
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h2 class="text-2xl font-bold mb-4">{{ alumni.user.username }}'s Profile</h2>
-        <p><strong>Email:</strong> {{ alumni.user.email }}</p>
-        <p><strong>Department:</strong> {{ alumni.department }}</p>
-        <p><strong>Passout Year:</strong> {{ alumni.passout_year }}</p>
-        <!-- Add more fields as needed -->
-        <a href="{% url 'admin_alumni_list' %}" class="text-blue-600 hover:underline mt-4 inline-block">← Back to list</a>
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ alumni.user.username }}'s Profile</h2>
+        
+        <div class="space-y-3 text-gray-700">
+            <p class="flex items-start">
+                <strong class="font-semibold w-28">Email:</strong>
+                <span class="flex-1">{{ alumni.user.email }}</span>
+            </p>
+            
+            <p class="flex items-start">
+                <strong class="font-semibold w-28">Department:</strong>
+                <span class="flex-1">{{ alumni.department }}</span>
+            </p>
+            
+            <p class="flex items-start">
+                <strong class="font-semibold w-28">Passout Year:</strong>
+                <span class="flex-1">{{ alumni.passout_year }}</span>
+            </p>
+            
+            <!-- Add more fields as needed following the same pattern -->
+        </div>
+        
+        <a href="{% url 'admin_alumni_list' %}" class="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to list
+        </a>
     </div>
 </section>
-{% endblock %}
+{% endblock %}  

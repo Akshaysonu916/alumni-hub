@@ -2,16 +2,16 @@
 {% block content %} 
 {% include "navbar.html" %}
 
-<section class="min-h-screen flex items-center justify-center bg-gray-900 p-4">
-    <div class="bg-gray-800 shadow-lg rounded-lg p-6 md:p-8 w-full max-w-md border border-gray-700">
+<section class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div class="bg-white shadow-lg rounded-lg p-6 md:p-8 w-full max-w-md border border-gray-200">
         <div class="flex flex-col items-center">
             <a href="#" class="flex items-center space-x-3">
-                <img class="w-12 h-12 rounded-full shadow-sm border border-gray-600" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" alt="logo">
-                <span class="text-2xl font-medium text-white">Alumni Hub</span>
+                <img class="w-12 h-12 rounded-full shadow-sm border border-gray-200" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6Wxo3iWcQN14Me9G9DkT4dSHTUvrpSCCp8g&s" alt="logo">
+                <span class="text-2xl font-medium text-gray-800">Alumni Hub</span>
             </a>
-            <h1 class="text-xl font-medium text-white mt-6">Sign In</h1>
-            <p class="text-gray-400 mt-2 text-sm">Enter your credentials to access your account</p>
-            <div class="w-16 h-0.5 bg-gray-600 mt-4"></div>
+            <h1 class="text-xl font-medium text-gray-800 mt-6">Sign In</h1>
+            <p class="text-gray-600 mt-2 text-sm">Enter your credentials to access your account</p>
+            <div class="w-16 h-0.5 bg-gray-300 mt-4"></div>
         </div>
 
         <!-- ✅ Display Django messages -->
@@ -24,7 +24,7 @@
                         {% elif message.tags == 'success' %}
                             bg-green-100 text-green-800
                         {% else %}
-                            bg-gray-100 text-gray-800
+                            bg-blue-100 text-blue-800
                         {% endif %}">
                         {{ message }}
                     </div>
@@ -35,47 +35,47 @@
         <form class="mt-8 space-y-5" method="POST">
             {% csrf_token %}
             <div>
-                <label for="username" class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fas fa-user text-sm"></i>
                     </span>
                     <input type="text" name="username" id="username" 
-                        class="w-full pl-10 p-3 bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+                        class="w-full pl-10 p-3 bg-gray-50 text-gray-800 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                         placeholder="Enter your username" required>
                 </div>
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fas fa-lock text-sm"></i>
                     </span>
                     <input type="password" name="password" id="password"
-                        class="w-full pl-10 p-3 bg-gray-700 text-white border border-gray-600 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 shadow-sm"
+                        class="w-full pl-10 p-3 bg-gray-50 text-gray-800 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
                         placeholder="Enter your password" required>
                     <span id="togglePassword" class="absolute inset-y-0 right-3 flex items-center cursor-pointer">
-                        <i id="eyeIcon" class="fas fa-eye-slash text-gray-400 hover:text-gray-200"></i>
+                        <i id="eyeIcon" class="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
                     </span>
                 </div>
                 <div class="flex justify-end mt-2">
-                    <a href="#" class="text-xs text-blue-400 hover:text-blue-300 hover:underline">Forgot password?</a>
+                    <a href="#" class="text-xs text-blue-600 hover:text-blue-500 hover:underline">Forgot password?</a>
                 </div>
             </div>
             <button type="submit"
-                class="w-full bg-blue-500 text-white font-medium py-3 px-4 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 mt-4">
+                class="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 transition-colors">
                 Sign In
             </button>
         </form>
 
         <div class="flex items-center my-6">
-            <div class="flex-grow h-px bg-gray-600"></div>
-            <span class="px-3 text-sm text-gray-400">or continue with</span>
-            <div class="flex-grow h-px bg-gray-600"></div>
+            <div class="flex-grow h-px bg-gray-300"></div>
+            <span class="px-3 text-sm text-gray-500">or continue with</span>
+            <div class="flex-grow h-px bg-gray-300"></div>
         </div>
-        <p class="text-sm text-gray-400 text-center">
+        <p class="text-sm text-gray-600 text-center">
             Don't have an account? 
-            <a href="{% url 'signup' %}" class="text-blue-400 font-medium hover:text-blue-300">Sign up</a>
+            <a href="{% url 'signup' %}" class="text-blue-600 font-medium hover:text-blue-500">Sign up</a>
         </p>
     </div>
 </section>

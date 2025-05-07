@@ -23,32 +23,28 @@
         }
     </style>
 </head>
-<body class="bg-gray-900">
+<body class="bg-white">
     {% block content %}
     {% include "navbar.html" %}
     {% for notification in connection_notifications %}
     {% endfor %}
 
-    <!-- Hero Section with Background Video -->
-    <div class="relative flex items-center justify-center h-screen bg-gray-900">
-        <!-- Dark Overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-
+    <!-- Hero Section -->
+    <div class="relative flex items-center justify-center h-screen bg-white">
         <!-- Content with Animations -->
-        <div class="relative z-10 text-center text-white">
-            <h1 class="text-4xl font-bold sm:text-5xl md:text-6xl tracking-wide opacity-0"
+        <div class="relative z-10 text-center">
+            <h1 class="text-4xl font-bold sm:text-5xl md:text-6xl tracking-wide opacity-0 text-gray-800"
                 style="animation: fadeIn 1s ease-out forwards;">
-                Welcome to <span class="text-blue-400">Alumni Hub</span>
+                Welcome to <span class="text-blue-600">Alumni Hub</span>
             </h1>
-            <p class="mt-4 text-lg text-gray-200 sm:text-xl opacity-0"
+            <p class="mt-4 text-lg text-gray-600 sm:text-xl opacity-0"
                 style="animation: slideIn 1.2s ease-out forwards 0.5s;">
                 Stay connected, explore jobs, and grow your network.
             </p>
             
-
             <div class="mt-6 flex justify-center space-x-4">
                 <a href="{% url 'combined_user_list' %}" 
-                    class="w-40 px-6 py-3 text-center font-semibold border-2 border-blue-500 text-blue-500 rounded-lg transition duration-300 hover:bg-blue-500 hover:text-white hover:shadow-lg"
+                    class="w-40 px-6 py-3 text-center font-semibold border-2 border-blue-600 text-blue-600 rounded-lg transition duration-300 hover:bg-blue-600 hover:text-white hover:shadow-lg"
                     style="animation: slideIn 1.2s ease-out forwards 0.8s;"
                     onmouseover="this.style.animation='bounce 0.3s ease-in-out infinite alternate';"
                     onmouseout="this.style.animation='none';">
@@ -56,7 +52,7 @@
                 </a>
                 
                 <a href="{% url 'photo_gallery' %}" 
-                    class="w-40 px-6 py-3 text-center font-semibold border-2 border-blue-500 text-blue-500 rounded-lg transition duration-300 hover:bg-blue-500 hover:text-white hover:shadow-lg"
+                    class="w-40 px-6 py-3 text-center font-semibold border-2 border-blue-600 text-blue-600 rounded-lg transition duration-300 hover:bg-blue-600 hover:text-white hover:shadow-lg"
                     style="animation: slideIn 1.2s ease-out forwards 0.8s;"
                     onmouseover="this.style.animation='bounce 0.3s ease-in-out infinite alternate';"
                     onmouseout="this.style.animation='none';">
@@ -64,17 +60,57 @@
                 </a>
             </div>            
         </div>
-
-        <!-- Background Video -->
-        <video autoplay loop muted class="absolute inset-0 w-full h-full object-cover">
-            <source src="" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
     </div>
-    <!-- Footer -->
-  <footer class="bg-gray-900 text-white text-center py-4">
-    <p>&copy; 2025 Alumni Hub. All Rights Reserved.</p>
-  </footer>
+
+<!-- Enhanced Footer -->
+<footer class="bg-blue-600 text-white py-8">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-2xl font-bold text-gray-50 mb-2">Alumni Hub</h3>
+                <p class="text-gray-50">Connecting past, present and future</p>
+            </div>
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-3">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'combined_user_list' %}" class="text-gray-50 hover:text-blue-400 transition">Connect</a></li>
+                        <li><a href="{% url 'photo_gallery' %}" class="text-gray-50 hover:text-blue-400 transition">Gallery</a></li>
+                        <li><a href="#" class="text-gray-50 hover:text-blue-400 transition">Events</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-50 hover:text-blue-400 transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-50 hover:text-blue-400 transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-50 hover:text-blue-400 transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-50 hover:text-blue-400 text-xl transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-50 hover:text-blue-400 text-xl transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-50 hover:text-blue-400 text-xl transition">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a href="#" class="text-gray-50 hover:text-blue-400 text-xl transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-50">
+            <p>&copy; 2025 Alumni Hub. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
     
     {% endblock content %}
 </body>

@@ -2,30 +2,58 @@
 {% load static %}
 {% block content %}
 {% include "navbar.html" %}
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="bg-white rounded-xl shadow-md p-8 text-center">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ profile.user.username }}</h1>
 
-    {% if profile.profile_picture %}
-      <img src="{{ profile.profile_picture.url }}" alt="Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4">
-    {% else %}
-      <img src="{% static 'default_profile.png' %}" alt="Default Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4">
-    {% endif %}
+<div class="max-w-4xl mx-auto px-4 py-8 space-y-6">
+  <!-- Profile Card -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="p-8 text-center">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ profile.user.username }}</h1>
 
-    {% if profile_type == 'alumni' %}
-      <p class="text-lg text-blue-600">{{ profile.job_title }} at {{ profile.company }}</p>
-      <p class="text-gray-600">{{ profile.department }} — Class of {{ profile.graduation_year }}</p>
-    {% elif profile_type == 'student' %}
-      <p class="text-lg text-green-600">{{ profile.major }}</p>
-      <p class="text-gray-600">Enrolled in {{ profile.enrollment_year }}</p>
-    {% endif %}
+      {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4 object-cover">
+      {% else %}
+        <img src="{% static 'default_profile.png' %}" alt="Default Profile" class="w-32 h-32 mx-auto rounded-full border-4 border-blue-500 mb-4 object-cover">
+      {% endif %}
 
-    <!-- Chat Button -->
-    {% if request.user != profile.user %}
-      <a href="{% url 'chat' profile.user.id %}" class="inline-block mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition">
-        Chat
-      </a>
-    {% endif %}
+      {% if profile_type == 'alumni' %}
+        <p class="text-lg text-blue-600 font-medium">{{ profile.job_title }} at {{ profile.company }}</p>
+        <p class="text-gray-600">{{ profile.department }} — Class of {{ profile.graduation_year }}</p>
+      {% elif profile_type == 'student' %}
+        <p class="text-lg text-green-600 font-medium">{{ profile.major }}</p>
+        <p class="text-gray-600">Enrolled in {{ profile.enrollment_year }}</p>
+      {% endif %}
+
+      <!-- Chat Button -->
+      {% if request.user != profile.user %}
+        <a href="{% url 'chat' profile.user.username %}" class="inline-block mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition duration-200">
+          Chat
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Skills Section -->
+    <div class="border-t border-gray-100 px-8 py-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Skills</h2>
+      
+      {% if profile.user.skills.all %}
+        <div class="space-y-4">
+          {% for skill in profile.user.skills.all %}
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-medium text-gray-700">{{ skill.name }}</span>
+                <span class="text-gray-500">{{ skill.proficiency }}%</span>
+              </div>
+              <div class="w-full bg-gray-100 rounded-full h-2.5">
+                <div class="bg-blue-500 h-2.5 rounded-full" style="width: {{ skill.proficiency }}%"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-gray-500">No skills added yet.</p>
+      {% endif %}
+    </div>
   </div>
 </div>
+
 {% endblock %}
