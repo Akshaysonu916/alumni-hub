@@ -321,7 +321,14 @@
             <a href="{% url 'my_notifications' %}" class="nav-link" style="position: relative;">
               <i class="fas fa-bell"></i>
               {% if unread_notifications_count > 0 %}
-                <span class="notification-badge">{{ unread_notifications_count }}</span>
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform translate-x-1 -translate-y-1">
+                {% comment %} <span class="notification-badge">{{ unread_notifications_count }}</span> {% endcomment %}
+                {% if unread_notifications_count > 9 %}
+                  9+
+                {% else %}
+                  {{ unread_notifications_count }}
+              {% endif %}
+                </span>
               {% endif %}
             </a> 
             <a href="{% url 'add_jobs' %}" class="nav-link"><i class="fas fa-plus-circle"></i> Add Jobs</a>
@@ -360,7 +367,14 @@
             <a href="{% url 'my_notifications' %}" class="nav-link" style="position: relative;">
               <i class="fas fa-bell"></i>
               {% if unread_notifications_count > 0 %}
-                <span class="notification-badge">{{ unread_notifications_count }}</span>
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform translate-x-1 -translate-y-1">
+                {% comment %} <span class="notification-badge">{{ unread_notifications_count }}</span> {% endcomment %}
+                {% if unread_notifications_count > 9 %}
+                  9+
+                {% else %}
+                  {{ unread_notifications_count }}
+              {% endif %}
+                </span>
               {% endif %}
             </a>
             <a href="{% url 'combined_user_list' %}" class="nav-link"><i class="fas fa-users"></i> Connect</a>

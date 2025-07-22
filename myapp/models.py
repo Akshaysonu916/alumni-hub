@@ -46,6 +46,13 @@ class JobPost(models.Model):
         ('IS', 'Internship'),
         ('RT', 'Remote-Job'),
     ))
+    department = models.CharField(max_length=20, choices=(
+        ('it', 'Information Technology'),
+        ('cs', 'Computer Science'),
+        ('me', 'Mechanical Engineering'),
+        ('ec', 'Electronics Engineering'),
+        ('ee', 'Electrical Engineering'),
+    ))
     company_website = models.URLField(blank=True, null=True)
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')  # ✅ Important
     salary = models.CharField(max_length=100, blank=True, null=True)

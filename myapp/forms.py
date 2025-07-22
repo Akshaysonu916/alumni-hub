@@ -72,12 +72,13 @@ class SignInForm(forms.Form):
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        fields = ['job_name', 'company', 'description', 'job_type', 'company_website', 'salary']  
+        fields = ['job_name', 'company', 'description', 'job_type','department', 'company_website', 'salary']  
         widgets = {
             'job_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Job Title'}),
             'company': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Job Description'}),
             'job_type': forms.Select(attrs={'class': 'form-select'}),
+            'department': forms.Select(attrs={'class': 'form-select'}),
             'company_website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Company Website Link'}),
             'salary': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. ₹40,000/month or Negotiable'}),
 

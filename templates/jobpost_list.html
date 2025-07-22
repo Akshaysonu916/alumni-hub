@@ -15,26 +15,48 @@
             </p>
         </div>
 
-        <!-- Enhanced Search Bar -->
-        <form method="get" class="mb-16 max-w-3xl mx-auto">
-            <div class="relative flex items-center shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
-                <input type="text" name="q" placeholder="Search by job name, company, or type..."
-                    value="{{ request.GET.q }}"
-                    class="w-full px-6 py-4 bg-white text-gray-900 focus:outline-none">
-                <button type="submit"
-                    class="absolute right-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </div>
+        <!-- Enhanced Search and Filter Bar -->
+        <div class="mb-16 max-w-3xl mx-auto">
+            <form method="get" class="flex flex-col md:flex-row gap-4">
+                <!-- Search Input -->
+                <div class="relative flex-1 flex items-center shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+                    <input type="text" name="q" placeholder="Search by job name, company, or type..."
+                        value="{{ request.GET.q }}"
+                        class="w-full px-6 py-4 bg-white text-gray-900 focus:outline-none">
+                    <button type="submit"
+                        class="absolute right-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Department Filter -->
+                <div class="relative">
+                    <select name="department" class="appearance-none w-full px-6 py-4 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 text-gray-700">
+                        <option value="">All Departments</option>
+                        <option value="it" {% if request.GET.department == 'it' %}selected{% endif %}>Information Technology</option>
+                        <option value="cs" {% if request.GET.department == 'cs' %}selected{% endif %}>Computer Science</option>
+                        <option value="me" {% if request.GET.department == 'me' %}selected{% endif %}>Mechanical Engineering</option>
+                        <option value="ec" {% if request.GET.department == 'ec' %}selected{% endif %}>Electronics Engineering</option>
+                        <option value="ee" {% if request.GET.department == 'ee' %}selected{% endif %}>Electrical Engineering</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                        </svg>
+                    </div>
+                </div>
+            </form>
+            
             <div class="mt-3 flex justify-between text-sm text-gray-500 px-2">
                 <span>Try: "Marketing Manager" or "Software Engineer"</span>
                 <span>{{ jobs|length }} jobs available</span>
             </div>
-        </form>
+        </div>
 
         {% if jobs %}
+        <!-- Rest of your template remains the same -->
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {% for job in jobs %}
             <!-- Enhanced Job Card -->
@@ -49,7 +71,16 @@
                             {% else %}bg-gray-50 text-gray-800 border border-gray-100{% endif %} mb-4">
                     {{ job.get_job_type_display }}
                 </span>
+
+                <span class="inline-block px-3 py-1 text-xs font-medium rounded-full 
+                            {% if job.department == 'it' %}bg-blue-50 text-blue-800 border border-blue-100
+                            {% elif job.department == 'cs' %}bg-green-50 text-green-800 border border-green-100
+                            {% elif job.department == 'me' %}bg-yellow-50 text-yellow-800 border border-yellow-100
+                            {% else %}bg-gray-50 text-gray-800 border border-gray-100{% endif %} mb-4">
+                    {{ job.get_department_display }}
+                </span>
                 
+                <!-- Rest of the job card content -->
                 <h2 class="text-xl font-bold text-gray-900 mb-2">{{ job.job_name }}</h2>
                 <p class="text-gray-700 mb-3 font-medium">{{ job.company_name }}</p>
                 
@@ -120,25 +151,29 @@
         <div class="mt-12 flex justify-center">
             <nav class="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-l-md">
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}" 
+                       class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-l-md">
                         Previous
                     </a>
                 {% endif %}
                 
                 {% for num in page_obj.paginator.page_range %}
                     {% if page_obj.number == num %}
-                        <a href="?page={{ num }}" class="px-4 py-2 border border-blue-500 bg-blue-50 text-blue-600 font-medium">
+                        <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}" 
+                           class="px-4 py-2 border border-blue-500 bg-blue-50 text-blue-600 font-medium">
                             {{ num }}
                         </a>
                     {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <a href="?page={{ num }}" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}" 
+                           class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
                             {{ num }}
                         </a>
                     {% endif %}
                 {% endfor %}
                 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-r-md">
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.department %}&department={{ request.GET.department }}{% endif %}" 
+                       class="px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 rounded-r-md">
                         Next
                     </a>
                 {% endif %}

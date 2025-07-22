@@ -63,7 +63,7 @@ def notifications_view(request):
 
     return render(request, 'notification.html', {
         'notifications': notifications,
-        'notification_count': 0  # Already marked as read
+        'notification_count': notifications.count()  # Already marked as read
     })
 
 
@@ -155,33 +155,63 @@ def logout_view(request):
 
 
 
-#job posts all operations
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.utils import timezone
+from .models import JobPost, Connection, Notification
+
 @login_required(login_url='signin')
 def jobpost_list(request):
+    # Get search query and department filter from request
     query = request.GET.get("q")
+    department = request.GET.get("department")
 
-    # 🔎 Job filtering based on the search query
+    # Start with all jobs
+    jobs = JobPost.objects.all()
+
+    # Apply search filter if query exists
     if query:
-        jobs = JobPost.objects.filter(Q(job_name__icontains=query))
-    else:
-        jobs = JobPost.objects.all()
+        jobs = jobs.filter(
+            Q(job_name__icontains=query) |
+            Q(company_name__icontains=query) |
+            Q(description__icontains=query)
+        )
+    # Apply department filter if selected
+    if department:
+        jobs = jobs.filter(department=department)
 
-    # 🔔 Connection notifications
-    connection_notifications = Connection.objects.filter(to_user=request.user, is_accepted=False)
+    # Connection notifications
+    connection_notifications = Connection.objects.filter(
+        to_user=request.user, 
+        is_accepted=False
+    )
     connection_count = connection_notifications.count()
 
-    # 📩 Unread general notifications (for students only)
+    # Unread general notifications (for students only)
     unread_count = 0
     if hasattr(request.user, 'student_profile'):
-        unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
-        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True, read_at=timezone.now())
+        unread_count = Notification.objects.filter(
+            user=request.user, 
+            is_read=False
+        ).count()
+        # Mark notifications as read when viewing job list
+        Notification.objects.filter(
+            user=request.user, 
+            is_read=False
+        ).update(is_read=True, read_at=timezone.now())
 
-    return render(request, 'jobpost_list.html', {
+    context = {
         'jobs': jobs,
         'connection_notifications': connection_notifications,
         'count': connection_count,
         'unread_notifications_count': unread_count,
-    })
+        # Pass the current filter values back to template
+        'current_query': query,
+        'current_department': department,
+    }
+    
+    return render(request, 'jobpost_list.html', context)
 
 def userjobs_view(request):
     jobs = JobPost.objects.all()
